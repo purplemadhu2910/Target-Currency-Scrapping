@@ -1,0 +1,299 @@
+2026-11-20 14:57:51 [INFO] [Main] Executing Manual Mode...
+2026-11-20 14:57:51 [INFO] [Main] Starting extraction cycle (Mode: Manual)...
+2026-11-20 14:57:51 [INFO] [Scraper] Connecting to website (Attempt 1/3): https://tradingeconomics.com/currencies
+2026-11-20 14:58:12 [INFO] [Scraper] Waiting for dynamic currency tables to load...
+2026-11-20 14:58:15 [INFO] [Scraper] Page loaded successfully! Source length: 711,190 characters.
+2026-11-20 14:58:20 [INFO] [DataProcessor] Found 6 table elements on the page.
+2026-11-20 14:58:20 [INFO] [DataProcessor] Section 'Major': Extracted 27 records.
+2026-11-20 14:58:20 [INFO] [DataProcessor] Section 'Europe': Extracted 9 records.
+2026-11-20 14:58:20 [INFO] [DataProcessor] Section 'America': Extracted 22 records.
+2026-11-20 14:58:20 [INFO] [DataProcessor] Section 'Asia': Extracted 38 records.
+2026-11-20 14:58:20 [INFO] [DataProcessor] Section 'Oceania': Extracted 3 records.
+2026-11-20 14:58:20 [INFO] [DataProcessor] Section 'Africa': Extracted 41 records.
+2026-11-20 14:58:20 [INFO] [ExcelWriter] Creating new Excel workbook at C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx...
+2026-11-20 14:58:20 [INFO] [ExcelWriter] Successfully saved to Excel! (0 updated, 140 added, Total rows in sheet: 140).
+2026-11-20 14:58:20 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-20 14:58:20 [INFO] [Main] Manual extraction completed successfully.
+2026-11-20 15:14:03 [INFO] [Main] Executing Manual Mode...
+2026-11-20 15:14:03 [INFO] [Main] Starting target extraction cycle (Mode: Manual)...
+2026-11-20 15:14:03 [INFO] [Scraper] Initializing Chrome browser session for 3 target page(s)...
+2026-11-20 15:14:08 [INFO] [Scraper] Fetching URL [1/3] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-20 15:14:38 [WARNING] [Scraper] Timeout on page [1/3] attempt 1.
+2026-11-20 15:14:41 [INFO] [Scraper] Fetching URL [1/3] (Attempt 2): https://tradingeconomics.com/currencies
+2026-11-20 15:15:11 [WARNING] [Scraper] Timeout on page [1/3] attempt 2.
+2026-11-20 15:15:14 [INFO] [Scraper] Fetching URL [1/3] (Attempt 3): https://tradingeconomics.com/currencies
+2026-11-20 15:15:32 [INFO] [Scraper] Successfully loaded page 1: 726,139 characters.
+2026-11-20 15:15:32 [INFO] [Scraper] Fetching URL [2/3] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:15:38 [INFO] [Scraper] Successfully loaded page 2: 700,290 characters.
+2026-11-20 15:15:38 [INFO] [Scraper] Fetching URL [3/3] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-20 15:15:44 [INFO] [Scraper] Successfully loaded page 3: 700,464 characters.
+2026-11-20 15:15:52 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-20 15:15:54 [INFO] [DataProcessor] Target extraction completed: 5/5 pairs found (USD/INR, EUR/INR, JPY/INR, USD/JPY, EUR/USD).
+2026-11-20 15:15:54 [INFO] [ExcelWriter] Successfully saved 5 target pairs into Excel: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-20 15:15:54 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-20 15:15:54 [INFO] [Main] Manual extraction completed successfully.
+2026-11-20 15:17:54 [INFO] [Main] Executing Manual Mode...
+2026-11-20 15:17:54 [INFO] [Main] Starting target extraction cycle (Mode: Manual)...
+2026-11-20 15:17:54 [INFO] [Scraper] Initializing Chrome browser session for 3 target page(s)...
+2026-11-20 15:17:57 [INFO] [Scraper] Fetching URL [1/3] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-20 15:18:35 [WARNING] [Scraper] Timeout on page [1/3] attempt 1.
+2026-11-20 15:18:38 [INFO] [Scraper] Fetching URL [1/3] (Attempt 2): https://tradingeconomics.com/currencies
+2026-11-20 15:18:47 [INFO] [Scraper] Successfully loaded page 1: 731,643 characters.
+2026-11-20 15:18:47 [INFO] [Scraper] Fetching URL [2/3] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:18:55 [INFO] [Scraper] Successfully loaded page 2: 700,692 characters.
+2026-11-20 15:18:55 [INFO] [Scraper] Fetching URL [3/3] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-20 15:19:05 [INFO] [Scraper] Successfully loaded page 3: 701,399 characters.
+2026-11-20 15:19:41 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-20 15:19:43 [INFO] [DataProcessor] Target extraction completed: 5/5 pairs found (USD/INR, EUR/INR, JPY/INR, USD/JPY, EUR/USD).
+2026-11-20 15:19:43 [INFO] [ExcelWriter] Successfully saved 5 target pairs into Excel: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-20 15:19:43 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-20 15:19:43 [INFO] [Main] Manual extraction completed successfully.
+2026-11-20 15:21:59 [INFO] [Main] Executing Manual Mode...
+2026-11-20 15:21:59 [INFO] [Main] Starting target extraction cycle (Mode: Manual)...
+2026-11-20 15:21:59 [INFO] [Scraper] Initializing Chrome browser session for 3 target page(s)...
+2026-11-20 15:22:06 [INFO] [Scraper] Fetching URL [1/3] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-20 15:22:36 [WARNING] [Scraper] Timeout on page [1/3] attempt 1.
+2026-11-20 15:22:39 [INFO] [Scraper] Fetching URL [1/3] (Attempt 2): https://tradingeconomics.com/currencies
+2026-11-20 15:22:45 [INFO] [Scraper] Successfully loaded page 1: 728,998 characters.
+2026-11-20 15:22:45 [INFO] [Scraper] Fetching URL [2/3] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:23:15 [WARNING] [Scraper] Timeout on page [2/3] attempt 1.
+2026-11-20 15:23:18 [INFO] [Scraper] Fetching URL [2/3] (Attempt 2): https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:23:24 [INFO] [Scraper] Successfully loaded page 2: 701,874 characters.
+2026-11-20 15:23:24 [INFO] [Scraper] Fetching URL [3/3] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-20 15:23:29 [INFO] [Scraper] Successfully loaded page 3: 702,197 characters.
+2026-11-20 15:23:32 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-20 15:23:34 [INFO] [DataProcessor] Target extraction completed: 5/5 pairs found (USD/INR, EUR/INR, JPY/INR, USD/JPY, EUR/USD).
+2026-11-20 15:23:34 [INFO] [ExcelWriter] Successfully saved 5 target pairs into Excel: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-20 15:23:34 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-20 15:23:34 [INFO] [Main] Manual extraction completed successfully.
+2026-11-20 15:26:04 [INFO] [Main] Executing Manual Mode...
+2026-11-20 15:26:04 [INFO] [Main] Starting target extraction cycle (Mode: Manual)...
+2026-11-20 15:26:04 [INFO] [Scraper] Initializing Chrome browser session for 3 target page(s)...
+2026-11-20 15:26:07 [INFO] [Scraper] Fetching URL [1/3] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-20 15:26:27 [INFO] [Scraper] Successfully loaded page 1: 726,210 characters.
+2026-11-20 15:26:27 [INFO] [Scraper] Fetching URL [2/3] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:26:31 [INFO] [Scraper] Successfully loaded page 2: 698,070 characters.
+2026-11-20 15:26:31 [INFO] [Scraper] Fetching URL [3/3] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-20 15:26:37 [INFO] [Scraper] Successfully loaded page 3: 701,688 characters.
+2026-11-20 15:26:41 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-20 15:26:42 [INFO] [DataProcessor] Target extraction completed: 5/5 pairs found (USD/INR, EUR/INR, JPY/INR, USD/JPY, EUR/USD).
+2026-11-20 15:26:43 [INFO] [ExcelWriter] Successfully saved 5 target pairs into Excel: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-20 15:26:43 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-20 15:26:43 [INFO] [Main] Manual extraction completed successfully.
+2026-11-20 15:40:35 [INFO] [Main] Executing Manual Mode...
+2026-11-20 15:40:35 [INFO] [Main] Starting target extraction cycle (Mode: Manual)...
+2026-11-20 15:40:35 [INFO] [Scraper] Initializing Chrome browser session for 3 target page(s)...
+2026-11-20 15:40:39 [INFO] [Scraper] Fetching URL [1/3] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-20 15:41:30 [WARNING] [Scraper] Timeout on page [1/3] attempt 1.
+2026-11-20 15:41:33 [INFO] [Scraper] Fetching URL [1/3] (Attempt 2): https://tradingeconomics.com/currencies
+2026-11-20 15:42:03 [WARNING] [Scraper] Timeout on page [1/3] attempt 2.
+2026-11-20 15:42:06 [INFO] [Scraper] Fetching URL [1/3] (Attempt 3): https://tradingeconomics.com/currencies
+2026-11-20 15:42:41 [WARNING] [Scraper] Timeout on page [1/3] attempt 3.
+2026-11-20 15:42:41 [ERROR] [Scraper] Failed to load URL after 3 attempts: https://tradingeconomics.com/currencies
+2026-11-20 15:42:42 [INFO] [Scraper] Fetching URL [2/3] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:42:52 [INFO] [Scraper] Successfully loaded page 2: 701,406 characters.
+2026-11-20 15:42:52 [INFO] [Scraper] Fetching URL [3/3] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-20 15:42:57 [INFO] [Scraper] Successfully loaded page 3: 701,754 characters.
+2026-11-20 15:43:03 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-20 15:43:04 [INFO] [DataProcessor] Target extraction completed: 3/5 pairs found (EUR/INR, JPY/INR, EUR/USD).
+2026-11-20 15:43:04 [WARNING] [DataProcessor] Pairs not found in current cycle: USD/INR, USD/JPY
+2026-11-20 15:43:04 [ERROR] [ExcelWriter] Permission Denied: Could not write to 'C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx'. Please close the file in Microsoft Excel and re-run.
+2026-11-20 15:43:04 [WARNING] [Main] [WARNING] Failed to update Excel workbook at: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-20 15:43:04 [INFO] [Main] Manual extraction completed successfully.
+2026-11-20 15:45:59 [INFO] [Main] Executing Manual Mode...
+2026-11-20 15:45:59 [INFO] [Main] Starting target extraction cycle (Mode: Manual)...
+2026-11-20 15:45:59 [INFO] [Scraper] Initializing Chrome browser session for 3 target page(s)...
+2026-11-20 15:46:02 [INFO] [Scraper] Fetching URL [1/3] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-20 15:46:19 [INFO] [Scraper] Successfully loaded page 1: 695,563 characters.
+2026-11-20 15:46:19 [INFO] [Scraper] Fetching URL [2/3] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:46:49 [WARNING] [Scraper] Timeout on page [2/3] attempt 1.
+2026-11-20 15:46:52 [INFO] [Scraper] Fetching URL [2/3] (Attempt 2): https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:47:32 [WARNING] [Scraper] Timeout on page [2/3] attempt 2.
+2026-11-20 15:47:35 [INFO] [Scraper] Fetching URL [2/3] (Attempt 3): https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:47:47 [INFO] [Scraper] Successfully loaded page 2: 700,193 characters.
+2026-11-20 15:47:47 [INFO] [Scraper] Fetching URL [3/3] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-20 15:47:58 [INFO] [Scraper] Successfully loaded page 3: 700,588 characters.
+2026-11-20 15:48:02 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-20 15:48:04 [INFO] [DataProcessor] Price for JPY/INR is < 1 (0.5835); multiplied by 100 -> 58.3500
+2026-11-20 15:48:05 [INFO] [DataProcessor] Target extraction completed: 5/5 pairs found (USD/INR, EUR/INR, JPY/INR, USD/JPY, EUR/USD).
+2026-11-20 15:48:05 [ERROR] [ExcelWriter] Permission Denied: Could not write to 'C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx'. Please close the file in Microsoft Excel and re-run.
+2026-11-20 15:48:05 [WARNING] [Main] [WARNING] Failed to update Excel workbook at: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-20 15:48:05 [INFO] [Main] Manual extraction completed successfully.
+2026-11-20 15:55:47 [INFO] [Main] Executing Manual Mode...
+2026-11-20 15:55:47 [INFO] [Main] Starting target extraction cycle (Mode: Manual)...
+2026-11-20 15:55:47 [INFO] [Scraper] Initializing Chrome browser session for 3 target page(s)...
+2026-11-20 15:56:03 [WARNING] [selenium.webdriver.common.selenium_manager] Error sending stats to Plausible: error sending request for url (https://plausible.io/api/event)
+2026-11-20 15:56:09 [INFO] [Scraper] Fetching URL [1/3] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-20 15:57:09 [WARNING] [Scraper] Timeout on page [1/3] attempt 1.
+2026-11-20 15:57:12 [INFO] [Scraper] Fetching URL [1/3] (Attempt 2): https://tradingeconomics.com/currencies
+2026-11-20 15:57:46 [WARNING] [Scraper] Timeout on page [1/3] attempt 2.
+2026-11-20 15:57:49 [INFO] [Scraper] Fetching URL [1/3] (Attempt 3): https://tradingeconomics.com/currencies
+2026-11-20 15:58:20 [WARNING] [Scraper] Timeout on page [1/3] attempt 3.
+2026-11-20 15:58:20 [ERROR] [Scraper] Failed to load URL after 3 attempts: https://tradingeconomics.com/currencies
+2026-11-20 15:58:20 [INFO] [Scraper] Fetching URL [2/3] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:58:48 [WARNING] [Scraper] Timeout on page [2/3] attempt 1.
+2026-11-20 15:58:51 [INFO] [Scraper] Fetching URL [2/3] (Attempt 2): https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:58:58 [WARNING] [Scraper] WebDriver glitch on page [2/3] attempt 2: Message: unknown error: net::ERR_INTERNET_DISCONNECTED
+  (Session info: chrome=157.0.8103.79)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	(No symbol) [0x7ff7a3abd655]
+	(No symbol) [0x7ff7a39b4790]
+	(No symbol) [0x7ff7a3822fb3]
+	(No symbol) [0x7ff7a4030d61]
+	(No symbol) [0x7ff7a3818f17]
+	(No symbol) [0x7ff7a3db966a]
+	(No symbol) [0x7ff7a3db8a46]
+	(No symbol) [0x7ff7a3db8b0a]
+	(No symbol) [0x7ff7a38165fd]
+	(No symbol) [0x7ff7a3817522]
+	(No symbol) [0x7ff7a3824130]
+	(No symbol) [0x7ff7a3857b14]
+	(No symbol) [0x7ff7a384e11a]
+	(No symbol) [0x7ff7a3856bf1]
+	(No symbol) [0x7ff7a383c109]
+	(No symbol) [0x7ff7a383d433]
+	(No symbol) [0x7ff7a3f57041]
+	(No symbol) [0x7ff7a3f75c76]
+	(No symbol) [0x7ff7a3f6c340]
+	(No symbol) [0x7ff7a3bec9be]
+	(No symbol) [0x7ff7a39c2fa5]
+	(No symbol) [0x7ff7a39be2d4]
+	(No symbol) [0x7ff7a39be464]
+	(No symbol) [0x7ff7a39a731c]
+	(No symbol) [0x7ff9c63c259d]
+	(No symbol) [0x7ff9c718af78]
+
+2026-11-20 15:59:01 [INFO] [Scraper] Fetching URL [2/3] (Attempt 3): https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:59:07 [WARNING] [Scraper] WebDriver glitch on page [2/3] attempt 3: Message: unknown error: net::ERR_INTERNET_DISCONNECTED
+  (Session info: chrome=157.0.8103.79)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	(No symbol) [0x7ff7a3abd655]
+	(No symbol) [0x7ff7a39b4790]
+	(No symbol) [0x7ff7a3822fb3]
+	(No symbol) [0x7ff7a4030d61]
+	(No symbol) [0x7ff7a3818f17]
+	(No symbol) [0x7ff7a3db966a]
+	(No symbol) [0x7ff7a3db8a46]
+	(No symbol) [0x7ff7a3db8b0a]
+	(No symbol) [0x7ff7a38165fd]
+	(No symbol) [0x7ff7a3817522]
+	(No symbol) [0x7ff7a3824130]
+	(No symbol) [0x7ff7a3857b14]
+	(No symbol) [0x7ff7a384e11a]
+	(No symbol) [0x7ff7a3856bf1]
+	(No symbol) [0x7ff7a383c109]
+	(No symbol) [0x7ff7a383d433]
+	(No symbol) [0x7ff7a3f57041]
+	(No symbol) [0x7ff7a3f75c76]
+	(No symbol) [0x7ff7a3f6c340]
+	(No symbol) [0x7ff7a3bec9be]
+	(No symbol) [0x7ff7a39c2fa5]
+	(No symbol) [0x7ff7a39be2d4]
+	(No symbol) [0x7ff7a39be464]
+	(No symbol) [0x7ff7a39a731c]
+	(No symbol) [0x7ff9c63c259d]
+	(No symbol) [0x7ff9c718af78]
+
+2026-11-20 15:59:07 [ERROR] [Scraper] Failed to load URL after 3 attempts: https://tradingeconomics.com/currencies?base=eur
+2026-11-20 15:59:07 [INFO] [Scraper] Fetching URL [3/3] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-20 15:59:14 [WARNING] [Scraper] WebDriver glitch on page [3/3] attempt 1: Message: unknown error: net::ERR_INTERNET_DISCONNECTED
+  (Session info: chrome=157.0.8103.79)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	(No symbol) [0x7ff7a3abd655]
+	(No symbol) [0x7ff7a39b4790]
+	(No symbol) [0x7ff7a3822fb3]
+	(No symbol) [0x7ff7a4030d61]
+	(No symbol) [0x7ff7a3818f17]
+	(No symbol) [0x7ff7a3db966a]
+	(No symbol) [0x7ff7a3db8a46]
+	(No symbol) [0x7ff7a3db8b0a]
+	(No symbol) [0x7ff7a38165fd]
+	(No symbol) [0x7ff7a3817522]
+	(No symbol) [0x7ff7a3824130]
+	(No symbol) [0x7ff7a3857b14]
+	(No symbol) [0x7ff7a384e11a]
+	(No symbol) [0x7ff7a3856bf1]
+	(No symbol) [0x7ff7a383c109]
+	(No symbol) [0x7ff7a383d433]
+	(No symbol) [0x7ff7a3f57041]
+	(No symbol) [0x7ff7a3f75c76]
+	(No symbol) [0x7ff7a3f6c340]
+	(No symbol) [0x7ff7a3bec9be]
+	(No symbol) [0x7ff7a39c2fa5]
+	(No symbol) [0x7ff7a39be2d4]
+	(No symbol) [0x7ff7a39be464]
+	(No symbol) [0x7ff7a39a731c]
+	(No symbol) [0x7ff9c63c259d]
+	(No symbol) [0x7ff9c718af78]
+
+2026-11-20 15:59:17 [INFO] [Scraper] Fetching URL [3/3] (Attempt 2): https://tradingeconomics.com/currencies?base=jpy
+2026-11-20 15:59:23 [WARNING] [Scraper] WebDriver glitch on page [3/3] attempt 2: Message: unknown error: net::ERR_INTERNET_DISCONNECTED
+  (Session info: chrome=157.0.8103.79)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	(No symbol) [0x7ff7a3abd655]
+	(No symbol) [0x7ff7a39b4790]
+	(No symbol) [0x7ff7a3822fb3]
+	(No symbol) [0x7ff7a4030d61]
+	(No symbol) [0x7ff7a3818f17]
+	(No symbol) [0x7ff7a3db966a]
+	(No symbol) [0x7ff7a3db8a46]
+	(No symbol) [0x7ff7a3db8b0a]
+	(No symbol) [0x7ff7a38165fd]
+	(No symbol) [0x7ff7a3817522]
+	(No symbol) [0x7ff7a3824130]
+	(No symbol) [0x7ff7a3857b14]
+	(No symbol) [0x7ff7a384e11a]
+	(No symbol) [0x7ff7a3856bf1]
+	(No symbol) [0x7ff7a383c109]
+	(No symbol) [0x7ff7a383d433]
+	(No symbol) [0x7ff7a3f57041]
+	(No symbol) [0x7ff7a3f75c76]
+	(No symbol) [0x7ff7a3f6c340]
+	(No symbol) [0x7ff7a3bec9be]
+	(No symbol) [0x7ff7a39c2fa5]
+	(No symbol) [0x7ff7a39be2d4]
+	(No symbol) [0x7ff7a39be464]
+	(No symbol) [0x7ff7a39a731c]
+	(No symbol) [0x7ff9c63c259d]
+	(No symbol) [0x7ff9c718af78]
+
+2026-11-20 15:59:26 [INFO] [Scraper] Fetching URL [3/3] (Attempt 3): https://tradingeconomics.com/currencies?base=jpy
+2026-11-20 15:59:32 [WARNING] [Scraper] WebDriver glitch on page [3/3] attempt 3: Message: unknown error: net::ERR_INTERNET_DISCONNECTED
+  (Session info: chrome=157.0.8103.79)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	(No symbol) [0x7ff7a3abd655]
+	(No symbol) [0x7ff7a39b4790]
+	(No symbol) [0x7ff7a3822fb3]
+	(No symbol) [0x7ff7a4030d61]
+	(No symbol) [0x7ff7a3818f17]
+	(No symbol) [0x7ff7a3db966a]
+	(No symbol) [0x7ff7a3db8a46]
+	(No symbol) [0x7ff7a3db8b0a]
+	(No symbol) [0x7ff7a38165fd]
+	(No symbol) [0x7ff7a3817522]
+	(No symbol) [0x7ff7a3824130]
+	(No symbol) [0x7ff7a3857b14]
+	(No symbol) [0x7ff7a384e11a]
+	(No symbol) [0x7ff7a3856bf1]
+	(No symbol) [0x7ff7a383c109]
+	(No symbol) [0x7ff7a383d433]
+	(No symbol) [0x7ff7a3f57041]
+	(No symbol) [0x7ff7a3f75c76]
+	(No symbol) [0x7ff7a3f6c340]
+	(No symbol) [0x7ff7a3bec9be]
+	(No symbol) [0x7ff7a39c2fa5]
+	(No symbol) [0x7ff7a39be2d4]
+	(No symbol) [0x7ff7a39be464]
+	(No symbol) [0x7ff7a39a731c]
+	(No symbol) [0x7ff9c63c259d]
+	(No symbol) [0x7ff9c718af78]
+
+2026-11-20 15:59:32 [ERROR] [Scraper] Failed to load URL after 3 attempts: https://tradingeconomics.com/currencies?base=jpy
+2026-11-20 16:00:31 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-20 16:00:31 [ERROR] [Main] Extraction aborted: Unable to retrieve rendered HTML from target pages.
+2026-11-20 16:00:31 [ERROR] [Main] Manual extraction failed.

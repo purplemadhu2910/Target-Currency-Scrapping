@@ -1,0 +1,22 @@
+# Python byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.venv/
+venv/
+env/
+
+# Logs (keep directory structure, ignore log outputs)
+logs/*.log
+!logs/.gitkeep
+
+# IDE and Editor settings
+.vscode/
+.idea/
+
+# OS specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
