@@ -227,7 +227,7 @@ if not df_curr.empty or not df_energy.empty or not df_metals.empty:
     # TAB 2: ENERGY COMMODITIES
     with tab_energy:
         st.subheader("Target Energy Commodities")
-        st.caption("Methanol price is factored by live USD/CNY rate. TTF Gas corresponds to European Natural Gas.")
+        st.caption("Methanol price is factored by live USD/CNY rate. TTF Gas corresponds to European Natural Gas. Jet Fuel is extracted from IATA Fuel Price Monitor.")
         st.dataframe(df_energy, use_container_width=True, hide_index=True)
 
     # TAB 3: METALS COMMODITIES

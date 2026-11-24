@@ -53,6 +53,9 @@ TARGET_COMMODITIES = {
     "Jet Fuel": ["Jet Fuel", "Kerosene"]
 }
 
+# Dedicated IATA Jet Fuel Price Monitor URL
+IATA_JET_FUEL_URL = "https://www.iata.org/en/publications/economics/fuel-monitor/"
+
 # --- SPECIFIC TARGET METALS & INDUSTRIAL COMMODITIES ---
 # Base exchange-traded commodity names
 METALS_BASE_NAMES = {

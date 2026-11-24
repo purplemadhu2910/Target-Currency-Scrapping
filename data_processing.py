@@ -7,9 +7,11 @@ Parses the rendered HTML pages for:
      (Rule: Methanol price is in CNY and factored by live USD/CNY rate).
 """
 
+import re
+import urllib.request
 import logging
 from datetime import datetime
-from typing import Dict, List, Tuple, Any, Union
+from typing import Dict, List, Tuple, Any, Union, Optional
 from bs4 import BeautifulSoup
 import pandas as pd
 
@@ -70,6 +72,46 @@ def _matches_commodity_alias(target_name: str, aliases: List[str], raw_item: str
         if a_lower in raw_lower:
             return True
     return False
+
+
+def fetch_iata_jet_fuel() -> Optional[Dict[str, str]]:
+    """
+    Fetches the latest official Jet Fuel Price and weekly change directly
+    from the IATA Fuel Price Monitor:
+    https://www.iata.org/en/publications/economics/fuel-monitor/
+    """
+    url = getattr(config, "IATA_JET_FUEL_URL", "https://www.iata.org/en/publications/economics/fuel-monitor/")
+    req = urllib.request.Request(
+        url,
+        headers={"User-Agent": config.USER_AGENT}
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=12) as resp:
+            html = resp.read().decode("utf-8", errors="ignore")
+            soup = BeautifulSoup(html, "html.parser")
+            text = soup.get_text()
+
+            price_match = re.search(r"\$([0-9]+(?:\.[0-9]+)?)/bbl", text, re.IGNORECASE)
+            change_match = re.search(r"(fell|rose|increased|dropped|up|down)\s+([0-9]+(?:\.[0-9]+)?)\%", text, re.IGNORECASE)
+
+            price = price_match.group(1) if price_match else "N/A"
+            if change_match:
+                direction = "-" if change_match.group(1).lower() in ["fell", "dropped", "down"] else "+"
+                weekly = f"{direction}{change_match.group(2)}%"
+            else:
+                weekly = "N/A"
+
+            logger.info(f"Captured live IATA Jet Fuel price: {price} USD/bbl (Weekly: {weekly})")
+            return {
+                "Commodity": "Jet Fuel",
+                "Price": price,
+                "Weekly": weekly,
+                "Monthly": "N/A",
+                "YoY": "N/A"
+            }
+    except Exception as e:
+        logger.warning(f"Could not fetch Jet Fuel from IATA ({url}): {e}")
+        return None
 
 
 def _matches_metal_alias(target_name: str, aliases: List[str], raw_item: str) -> bool:
@@ -291,9 +333,15 @@ def parse_all_target_data(html_pages: Union[str, List[str]]) -> Tuple[pd.DataFra
 
             ordered_comm_rows.append(row_dict)
         else:
+            if target_comm == "Jet Fuel":
+                iata_jet = fetch_iata_jet_fuel()
+                if iata_jet:
+                    ordered_comm_rows.append(iata_jet)
+                    continue
+
             ordered_comm_rows.append({
                 "Commodity": target_comm,
-                "Price": "N/A (Not on TE Energy table)",
+                "Price": "N/A",
                 "Weekly": "N/A",
                 "Monthly": "N/A",
                 "YoY": "N/A"
