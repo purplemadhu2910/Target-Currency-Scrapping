@@ -19,7 +19,6 @@ from excel_writer import save_or_update_excel
 # Page configuration
 st.set_page_config(
     page_title="Live Market Automation Dashboard",
-    page_icon="📈",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -122,7 +121,7 @@ with st.sidebar:
     st.divider()
 
     st.subheader("Actions")
-    scrape_clicked = st.button("🔄 Scrape & Refresh All Data Now", use_container_width=True, type="primary")
+    scrape_clicked = st.button("Scrape & Refresh All Data Now", use_container_width=True, type="primary")
 
     st.divider()
     st.subheader("Automation Settings")
@@ -146,7 +145,7 @@ with st.sidebar:
 
 
 # --- MAIN DASHBOARD CONTENT ---
-st.markdown('<div class="main-header">📈 Live Market Automation Dashboard</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header">Live Market Automation Dashboard</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="sub-header">Live Currencies (Forex) • Energy Commodities • Metals & Industrial • 4-Sheet Excel Automation</div>',
     unsafe_allow_html=True,
@@ -199,10 +198,10 @@ if not df_curr.empty or not df_energy.empty or not df_metals.empty:
 
     # 4 TABS: LIVE CURRENCIES, ENERGY COMMODITIES, METALS COMMODITIES, HISTORICAL LOG
     tab_curr, tab_energy, tab_metals, tab_hist = st.tabs([
-        "💱 Live Currencies (Sheet 1)",
-        "⚡ Energy Commodities (Sheet 3)",
-        "🏗️ Metals Commodities (Sheet 4)",
-        "📜 Currency History Log (Sheet 2)"
+        "Live Currencies (Sheet 1)",
+        "Energy Commodities (Sheet 3)",
+        "Metals Commodities (Sheet 4)",
+        "Currency History Log (Sheet 2)"
     ])
 
     # TAB 1: CURRENCIES
@@ -214,7 +213,7 @@ if not df_curr.empty or not df_energy.empty or not df_metals.empty:
             if config.EXCEL_FILE.exists():
                 with open(config.EXCEL_FILE, "rb") as f:
                     st.download_button(
-                        label="📥 Download Excel (.xlsx)",
+                        label="Download Excel (.xlsx)",
                         data=f.read(),
                         file_name="extracted_data.xlsx",
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -246,7 +245,7 @@ if not df_curr.empty or not df_energy.empty or not df_metals.empty:
             st.info("No historical records logged yet.")
 
     # Log Viewer
-    with st.expander("📋 View Recent Scraper Activity Logs"):
+    with st.expander("View Recent Scraper Activity Logs"):
         if config.LOG_FILE.exists():
             with open(config.LOG_FILE, "r", encoding="utf-8") as f:
                 recent_logs = "".join(f.readlines()[-20:])

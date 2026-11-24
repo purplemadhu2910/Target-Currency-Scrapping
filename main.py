@@ -69,7 +69,7 @@ def display_terminal_output(
     print(sub_sep)
 
     # 1. Currencies Table
-    print("📈 SECTION 1: TARGET CURRENCY PAIRS (Sheets: Live_Rates & History_Log)")
+    print("SECTION 1: TARGET CURRENCY PAIRS (Sheets: Live_Rates & History_Log)")
     if not df_currencies.empty:
         curr_table = tabulate(
             df_currencies,
@@ -86,7 +86,7 @@ def display_terminal_output(
     print("\n" + sub_sep)
 
     # 2. Energy Commodities Table
-    print("⚡ SECTION 2: ENERGY COMMODITIES (Sheet: Energy_Commodities)")
+    print("SECTION 2: ENERGY COMMODITIES (Sheet: Energy_Commodities)")
     if not df_energy.empty:
         energy_table = tabulate(
             df_energy,
@@ -103,7 +103,7 @@ def display_terminal_output(
     print("\n" + sub_sep)
 
     # 3. Metals & Industrial Commodities Table
-    print("🏗️ SECTION 3: METALS & INDUSTRIAL COMMODITIES (Sheet: Metals_Commodities)")
+    print("SECTION 3: METALS & INDUSTRIAL COMMODITIES (Sheet: Metals_Commodities)")
     if not df_metals.empty:
         metals_table = tabulate(
             df_metals,
