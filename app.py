@@ -88,19 +88,30 @@ def load_energy_commodities() -> pd.DataFrame:
     return pd.DataFrame()
 
 
+def load_metals_commodities() -> pd.DataFrame:
+    """Loads metals & industrial commodities from Metals_Commodities sheet."""
+    f = _get_target_excel_file()
+    if f:
+        try:
+            return pd.read_excel(f, sheet_name=config.EXCEL_SHEET_METALS)
+        except Exception:
+            return pd.DataFrame()
+    return pd.DataFrame()
+
+
 def run_live_scrape():
-    """Triggers the scraper for currencies & commodities and updates Excel."""
-    with st.spinner("Connecting to Trading Economics & extracting live Currencies and Energy Commodities..."):
+    """Triggers the scraper for currencies, energy & metals and updates Excel."""
+    with st.spinner("Connecting to Trading Economics & extracting live Currencies, Energy and Metals..."):
         html_pages = fetch_all_pages_html()
         if not html_pages:
             st.error("Failed to retrieve live webpage content.")
-            return None, None
+            return None, None, None
 
-        df_c, df_e, metadata = parse_all_target_data(html_pages)
+        df_c, df_e, df_m, metadata = parse_all_target_data(html_pages)
         timestamp = metadata.get("timestamp")
-        save_or_update_excel(df_c, df_e, config.EXCEL_FILE, timestamp_str=timestamp)
-        st.success(f"Successfully updated all 3 sheets at {timestamp}!")
-        return df_c, df_e
+        save_or_update_excel(df_c, df_e, df_m, config.EXCEL_FILE, timestamp_str=timestamp)
+        st.success(f"Successfully updated all 4 sheets at {timestamp}!")
+        return df_c, df_e, df_m
 
 
 # --- SIDEBAR CONTROLS ---
@@ -128,6 +139,7 @@ with st.sidebar:
     st.subheader("Target Assets")
     st.markdown("**Currencies:** USD/INR, EUR/INR, JPY/INR, USD/JPY, EUR/USD")
     st.markdown("**Energy:** Crude Oil, Brent, Natural gas, TTF Gas, Ethanol, Methanol, Jet Fuel")
+    st.markdown("**Metals:** HRC Steel, Copper, Aluminum Alloy, TinUSD, Zinc, Nickel, Platinum, Palladium, Rhodium, Lead, Lithium, Urea, Di-ammonium")
 
     st.divider()
     st.caption("Data Source: Trading Economics (Live Forex & Commodities)")
@@ -136,31 +148,36 @@ with st.sidebar:
 # --- MAIN DASHBOARD CONTENT ---
 st.markdown('<div class="main-header">📈 Live Market Automation Dashboard</div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="sub-header">Live Currencies (Forex) • Energy Commodities • Triple-Sheet Excel Automation</div>',
+    '<div class="sub-header">Live Currencies (Forex) • Energy Commodities • Metals & Industrial • 4-Sheet Excel Automation</div>',
     unsafe_allow_html=True,
 )
 
 if scrape_clicked:
-    df_curr, df_energy = run_live_scrape()
+    df_curr, df_energy, df_metals = run_live_scrape()
 else:
     df_curr = load_live_currencies()
     df_energy = load_energy_commodities()
+    df_metals = load_metals_commodities()
 
 df_history = load_history_currencies()
 
-# Top Metric Cards (Currencies + Key Energy)
-if not df_curr.empty or not df_energy.empty:
+# Top Metric Cards (Currencies + Key Energy + Key Metals)
+if not df_curr.empty or not df_energy.empty or not df_metals.empty:
     st.subheader("Market Highlights (At a Glance)")
     metric_cols = st.columns(5)
 
-    # Show top 3 currencies + Crude Oil + TTF Gas
+    # Show top 2 currencies + Crude Oil + Copper + Lithium
     highlight_items = []
     if not df_curr.empty:
-        for _, r in df_curr.head(3).iterrows():
+        for _, r in df_curr.head(2).iterrows():
             highlight_items.append((r["Crosses"], r["Price"], r["YoY"], r["Weekly"]))
     if not df_energy.empty:
         for _, r in df_energy.iterrows():
-            if r["Commodity"] in ["Crude Oil", "TTF Gas"]:
+            if r["Commodity"] in ["Crude Oil"]:
+                highlight_items.append((r["Commodity"], r["Price"], r["YoY"], r["Weekly"]))
+    if not df_metals.empty:
+        for _, r in df_metals.iterrows():
+            if r["Commodity"] in ["Copper", "Lithium"]:
                 highlight_items.append((r["Commodity"], r["Price"], r["YoY"], r["Weekly"]))
 
     for idx, item in enumerate(highlight_items[:5]):
@@ -180,10 +197,11 @@ if not df_curr.empty or not df_energy.empty:
     st.write("")
     st.divider()
 
-    # 3 TABS: LIVE CURRENCIES, ENERGY COMMODITIES, HISTORICAL LOG
-    tab_curr, tab_energy, tab_hist = st.tabs([
+    # 4 TABS: LIVE CURRENCIES, ENERGY COMMODITIES, METALS COMMODITIES, HISTORICAL LOG
+    tab_curr, tab_energy, tab_metals, tab_hist = st.tabs([
         "💱 Live Currencies (Sheet 1)",
         "⚡ Energy Commodities (Sheet 3)",
+        "🏗️ Metals Commodities (Sheet 4)",
         "📜 Currency History Log (Sheet 2)"
     ])
 
@@ -212,7 +230,13 @@ if not df_curr.empty or not df_energy.empty:
         st.caption("Methanol price is factored by live USD/CNY rate. TTF Gas corresponds to European Natural Gas.")
         st.dataframe(df_energy, use_container_width=True, hide_index=True)
 
-    # TAB 3: HISTORY LOG
+    # TAB 3: METALS COMMODITIES
+    with tab_metals:
+        st.subheader("Target Metals & Industrial Commodities")
+        st.caption("Copper price is factored by 2204.62 (converted to USD/Metric Ton). All other commodities factored per specification.")
+        st.dataframe(df_metals, use_container_width=True, hide_index=True)
+
+    # TAB 4: HISTORY LOG
     with tab_hist:
         st.subheader("Historical Log of Currency Extractions")
         if not df_history.empty:

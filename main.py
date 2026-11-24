@@ -48,18 +48,19 @@ logger = logging.getLogger("Main")
 def display_terminal_output(
     df_currencies: pd.DataFrame,
     df_energy: pd.DataFrame,
+    df_metals: pd.DataFrame,
     metadata: Dict[str, Any],
     mode_name: str
 ):
     """
     Prints a clean, formatted report directly to the terminal,
-    displaying both Target Currencies and Energy Commodities.
+    displaying Target Currencies, Energy Commodities, and Metals Commodities.
     """
     separator = "=" * 80
     sub_sep = "-" * 80
 
     print("\n" + separator)
-    print("      LIVE MARKET DATA EXTRACTION REPORT (CURRENCIES & ENERGY COMMODITIES)")
+    print("      LIVE MARKET DATA EXTRACTION REPORT (CURRENCIES, ENERGY & METALS)")
     print(separator)
     print(f"Extraction Timestamp : {metadata.get('timestamp')}")
     print(f"Execution Mode       : {mode_name.capitalize()}")
@@ -99,16 +100,33 @@ def display_terminal_output(
     else:
         print("  [!] No energy commodities extracted.")
 
+    print("\n" + sub_sep)
+
+    # 3. Metals & Industrial Commodities Table
+    print("🏗️ SECTION 3: METALS & INDUSTRIAL COMMODITIES (Sheet: Metals_Commodities)")
+    if not df_metals.empty:
+        metals_table = tabulate(
+            df_metals,
+            headers="keys",
+            tablefmt="grid",
+            showindex=False,
+            stralign="right",
+            numalign="right",
+        )
+        print(metals_table)
+    else:
+        print("  [!] No metals commodities extracted.")
+
     print(separator + "\n")
 
 
-def execute_extraction(mode_name: str) -> Tuple[Optional[pd.DataFrame], Optional[pd.DataFrame]]:
+def execute_extraction(mode_name: str) -> Tuple[Optional[pd.DataFrame], Optional[pd.DataFrame], Optional[pd.DataFrame]]:
     """
     Executes a single extraction lifecycle:
       1. Fetches rendered HTML across target pages (currencies & commodities).
       2. Parses data into DataFrames.
       3. Displays results in terminal.
-      4. Saves/updates Excel workbook across all 3 sheets.
+      4. Saves/updates Excel workbook across all 4 sheets.
     """
     logger.info(f"Starting extraction cycle (Mode: {mode_name})...")
 
@@ -116,33 +134,33 @@ def execute_extraction(mode_name: str) -> Tuple[Optional[pd.DataFrame], Optional
     html_pages = fetch_all_pages_html()
     if not html_pages:
         logger.error("Extraction aborted: Unable to retrieve rendered HTML from target pages.")
-        return None, None
+        return None, None, None
 
-    # 2. Parse tables for Currencies + Energy Commodities
-    df_currencies, df_energy, metadata = parse_all_target_data(html_pages)
-    if df_currencies.empty and df_energy.empty:
+    # 2. Parse tables for Currencies + Energy + Metals Commodities
+    df_currencies, df_energy, df_metals, metadata = parse_all_target_data(html_pages)
+    if df_currencies.empty and df_energy.empty and df_metals.empty:
         logger.warning("No data extracted from target pages.")
-        return None, None
+        return None, None, None
 
     # 3. Print tabular results in terminal
-    display_terminal_output(df_currencies, df_energy, metadata, mode_name)
+    display_terminal_output(df_currencies, df_energy, df_metals, metadata, mode_name)
 
-    # 4. Save to Excel workbook across 3 sheets
+    # 4. Save to Excel workbook across 4 sheets
     timestamp = metadata.get("timestamp")
-    excel_success = save_or_update_excel(df_currencies, df_energy, config.EXCEL_FILE, timestamp_str=timestamp)
+    excel_success = save_or_update_excel(df_currencies, df_energy, df_metals, config.EXCEL_FILE, timestamp_str=timestamp)
     if excel_success:
-        logger.info(f"[SUCCESS] Excel workbook updated successfully: {config.EXCEL_FILE}")
+        logger.info(f"[SUCCESS] Excel workbook updated successfully: {config.EXCEL_FILE} (4 sheets)")
     else:
         logger.warning(f"[WARNING] Failed to update Excel workbook at: {config.EXCEL_FILE}")
 
-    return df_currencies, df_energy
+    return df_currencies, df_energy, df_metals
 
 
 def run_manual_mode():
     """Runs a single on-demand extraction."""
     logger.info("Executing Manual Mode...")
-    df_c, df_e = execute_extraction(mode_name="Manual")
-    if df_c is not None or df_e is not None:
+    df_c, df_e, df_m = execute_extraction(mode_name="Manual")
+    if df_c is not None or df_e is not None or df_m is not None:
         logger.info("Manual extraction completed successfully.")
     else:
         logger.error("Manual extraction failed.")
@@ -179,12 +197,14 @@ def run_continuous_mode(poll_seconds: int):
             logger.info(f"--- Continuous Polling Cycle #{cycle} ---")
             html_pages = fetch_all_pages_html()
             if html_pages:
-                df_c, df_e, metadata = parse_all_target_data(html_pages)
+                df_c, df_e, df_m, metadata = parse_all_target_data(html_pages)
                 current_prices = {}
                 if not df_c.empty:
                     current_prices.update(dict(zip(df_c["Crosses"], df_c["Price"])))
                 if not df_e.empty:
                     current_prices.update(dict(zip(df_e["Commodity"], df_e["Price"])))
+                if not df_m.empty:
+                    current_prices.update(dict(zip(df_m["Commodity"], df_m["Price"])))
 
                 changes = []
                 for item, current_price in current_prices.items():
@@ -194,13 +214,13 @@ def run_continuous_mode(poll_seconds: int):
 
                 if not previous_prices:
                     logger.info("Initial baseline captured. Writing to Excel...")
-                    display_terminal_output(df_c, df_e, metadata, mode_name=f"Continuous (Cycle #{cycle})")
-                    save_or_update_excel(df_c, df_e, config.EXCEL_FILE, timestamp_str=metadata.get("timestamp"))
+                    display_terminal_output(df_c, df_e, df_m, metadata, mode_name=f"Continuous (Cycle #{cycle})")
+                    save_or_update_excel(df_c, df_e, df_m, config.EXCEL_FILE, timestamp_str=metadata.get("timestamp"))
                     previous_prices = current_prices
                 elif changes:
                     logger.info(f"Detected {len(changes)} price changes: {', '.join(changes)}")
-                    display_terminal_output(df_c, df_e, metadata, mode_name=f"Continuous (Cycle #{cycle} - UPDATES)")
-                    save_or_update_excel(df_c, df_e, config.EXCEL_FILE, timestamp_str=metadata.get("timestamp"))
+                    display_terminal_output(df_c, df_e, df_m, metadata, mode_name=f"Continuous (Cycle #{cycle} - UPDATES)")
+                    save_or_update_excel(df_c, df_e, df_m, config.EXCEL_FILE, timestamp_str=metadata.get("timestamp"))
                     previous_prices = current_prices
                 else:
                     logger.info("No price changes detected among target assets.")

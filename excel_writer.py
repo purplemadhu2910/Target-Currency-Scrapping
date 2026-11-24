@@ -66,13 +66,14 @@ def _auto_adjust_column_widths(ws):
 def save_or_update_excel(
     df_currencies: pd.DataFrame,
     df_energy: Optional[pd.DataFrame] = None,
+    df_metals: Optional[pd.DataFrame] = None,
     file_path: Path = config.EXCEL_FILE,
     timestamp_str: Optional[str] = None
 ) -> bool:
     """
-    Saves extracted currencies and energy commodities into the Excel workbook across 3 sheets.
+    Saves extracted currencies, energy, and metals commodities into the Excel workbook across 4 sheets.
     """
-    if df_currencies.empty and (df_energy is None or df_energy.empty):
+    if df_currencies.empty and (df_energy is None or df_energy.empty) and (df_metals is None or df_metals.empty):
         logger.warning("Empty DataFrames provided. Skipping Excel write.")
         return False
 
@@ -239,10 +240,54 @@ def save_or_update_excel(
 
             _auto_adjust_column_widths(ws_energy)
 
+        # ==============================================================
+        # SHEET 4: Metals_Commodities (HRC Steel, Copper, Aluminum, Zinc...)
+        # ==============================================================
+        if df_metals is not None and not df_metals.empty:
+            if config.EXCEL_SHEET_METALS in wb.sheetnames:
+                ws_metals = wb[config.EXCEL_SHEET_METALS]
+                if ws_metals.max_row > 1:
+                    ws_metals.delete_rows(2, ws_metals.max_row)
+            else:
+                ws_metals = wb.create_sheet(title=config.EXCEL_SHEET_METALS)
+
+            for col_idx, col_name in enumerate(config.COMMODITY_COLUMNS, start=1):
+                ws_metals.cell(row=1, column=col_idx, value=col_name)
+            _apply_header_styles(ws_metals, config.COMMODITY_COLUMNS)
+
+            for row_idx, (_, row_data) in enumerate(df_metals.iterrows(), start=2):
+                ws_metals.row_dimensions[row_idx].height = 22
+                for col_idx, col_name in enumerate(config.COMMODITY_COLUMNS, start=1):
+                    val = row_data[col_name]
+                    cell = ws_metals.cell(row=row_idx, column=col_idx)
+
+                    if col_name == "Price":
+                        try:
+                            clean_num = float(str(val).replace(",", ""))
+                            cell.value = clean_num
+                            cell.number_format = "#,##0.00"
+                            cell.alignment = DATA_ALIGN_RIGHT
+                        except ValueError:
+                            cell.value = val
+                            cell.alignment = DATA_ALIGN_RIGHT
+                    elif col_name == "Commodity":
+                        cell.value = val
+                        cell.alignment = DATA_ALIGN_LEFT
+                        cell.font = Font(name="Segoe UI", size=10, bold=True)
+                    else:
+                        cell.value = val
+                        cell.alignment = DATA_ALIGN_RIGHT
+
+                    if col_name != "Commodity":
+                        cell.font = DATA_FONT
+                    cell.border = BORDER_ALL_THIN
+
+            _auto_adjust_column_widths(ws_metals)
+
         # Save workbook
         try:
             wb.save(target_path)
-            logger.info(f"Successfully saved to Excel: {target_path} (All 3 sheets updated).")
+            logger.info(f"Successfully saved to Excel: {target_path} (All 4 sheets updated).")
         except PermissionError:
             fallback_path = target_path.parent / "extracted_data_latest.xlsx"
             wb.save(fallback_path)

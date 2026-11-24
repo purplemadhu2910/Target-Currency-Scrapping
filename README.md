@@ -1,6 +1,6 @@
 # Live Market Scraping & Excel Automation Project (`wsp`)
 
-A Python web scraping, Excel automation, and web dashboard system that extracts **Target Currencies** and **Energy Commodities** directly from **Trading Economics**, displays them cleanly in the VS Code terminal or web dashboard, and automatically creates/updates an Excel workbook (`extracted_data.xlsx`).
+A Python web scraping, Excel automation, and web dashboard system that extracts **Target Currencies**, **Energy Commodities**, and **Metals & Industrial Commodities** directly from **Trading Economics**, displays them cleanly in the VS Code terminal or web dashboard, and automatically creates/updates an Excel workbook (`extracted_data.xlsx`).
 
 ---
 
@@ -22,15 +22,31 @@ A Python web scraping, Excel automation, and web dashboard system that extracts 
 6. **Methanol** (CNY/Tonne converted/factored by live USD/CNY rate)
 7. **Jet Fuel** (Tracked status)
 
+### C. Target Metals & Industrial Commodities
+1. **HRC Steel** (factor: 1)
+2. **Copper** (factor: **2204.62** — converts from USD/lb to USD/Metric Ton)
+3. **Aluminum Alloy** (factor: 1)
+4. **TinUSD** (factor: 1)
+5. **Zinc** (factor: 1)
+6. **Nickel** (factor: 1)
+7. **Platinum** (factor: 1)
+8. **Palladium** (factor: 1)
+9. **Rhodium** (factor: 1)
+10. **Lead** (factor: 1)
+11. **Lithium** (factor: 1)
+12. **Urea** (factor: 1)
+13. **Di-ammonium** (factor: 1)
+
 ---
 
 ## 2. Excel Workbook Structure (`extracted_data.xlsx`)
 
-The generated workbook contains **three dedicated sheets**:
+The generated workbook contains **four dedicated sheets**:
 
 * **Sheet 1 (`Live_Rates`):** Latest live snapshot of the 5 currency pairs.
 * **Sheet 2 (`History_Log`):** Historical log of past currency extractions with timestamps.
 * **Sheet 3 (`Energy_Commodities`):** Live Energy commodities data (Crude Oil, Brent, Natural gas, TTF Gas, Ethanol, Methanol factored by USDCNY, Jet Fuel).
+* **Sheet 4 (`Metals_Commodities`):** Live Metals and Industrial commodities with exact factoring rules (Copper factored by 2204.62).
 
 ---
 
@@ -39,11 +55,11 @@ The generated workbook contains **three dedicated sheets**:
 ```text
 wsp/
 │
-├── app.py                # Streamlit interactive Web Dashboard (Currencies + Commodities)
+├── app.py                # Streamlit interactive Web Dashboard (Currencies + Energy + Metals)
 ├── config.py             # URLs, asset lists, mapping dictionaries, timeouts
 ├── scraper.py            # Single-session headless Selenium browser engine
-├── data_processing.py    # BeautifulSoup & Pandas parser: currencies, energy, and Methanol factoring
-├── excel_writer.py       # OpenPyXL 3-sheet automation (Live_Rates, History_Log, Energy_Commodities)
+├── data_processing.py    # BeautifulSoup & Pandas parser: currencies, energy, metals, factoring rules
+├── excel_writer.py       # OpenPyXL 4-sheet automation (Live_Rates, History_Log, Energy, Metals)
 ├── main.py               # Main CLI orchestrator (Manual, Periodic, Continuous, and Daily modes)
 ├── run_scraper.bat       # 1-click launcher for terminal extraction & opening Excel
 ├── run_dashboard.bat     # 1-click launcher for the Streamlit web dashboard

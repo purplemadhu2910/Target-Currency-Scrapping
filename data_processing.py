@@ -61,9 +61,9 @@ def _process_currency_price(raw_val: str, display_name: str) -> str:
 
 def _matches_commodity_alias(target_name: str, aliases: List[str], raw_item: str) -> bool:
     """Checks if raw_item matches commodity aliases avoiding partial overlap (e.g. ethanol vs methanol)."""
-    raw_lower = raw_item.lower()
+    raw_lower = raw_item.lower().strip()
     for a in aliases:
-        a_lower = a.lower()
+        a_lower = a.lower().strip()
         # Prevent 'ethanol' from falsely matching 'methanol'
         if a_lower == "ethanol" and "methanol" in raw_lower:
             continue
@@ -72,17 +72,65 @@ def _matches_commodity_alias(target_name: str, aliases: List[str], raw_item: str
     return False
 
 
-def parse_all_target_data(html_pages: Union[str, List[str]]) -> Tuple[pd.DataFrame, pd.DataFrame, Dict[str, Any]]:
+def _matches_metal_alias(target_name: str, aliases: List[str], raw_item: str) -> bool:
+    """Checks if raw_item matches metal aliases with strict disambiguation."""
+    raw_lower = raw_item.lower().strip()
+    for a in aliases:
+        a_lower = a.lower().strip()
+        # Strict exact or prefix match for short names
+        if a_lower == "tin":
+            if raw_lower == "tin" or raw_lower.startswith("tin "):
+                return True
+            continue
+        if a_lower == "lead":
+            if raw_lower == "lead" or raw_lower.startswith("lead "):
+                return True
+            continue
+        if a_lower == "zinc":
+            if raw_lower == "zinc" or raw_lower.startswith("zinc "):
+                return True
+            continue
+        if a_lower == "nickel":
+            if raw_lower == "nickel" or raw_lower.startswith("nickel "):
+                return True
+            continue
+        if a_lower == "copper":
+            if raw_lower == "copper" or raw_lower.startswith("copper "):
+                return True
+            continue
+        if a_lower == "urea":
+            if raw_lower == "urea" or raw_lower.startswith("urea "):
+                return True
+            continue
+        if a_lower == "tinusd":
+            if (raw_lower == "tin" or "tin" in raw_lower) and "platinum" not in raw_lower:
+                return True
+            continue
+        if a_lower == "aluminum alloy":
+            if "aluminum alloy" in raw_lower:
+                return True
+            continue
+        if a_lower in ["di-ammonium", "dap"]:
+            if any(k in raw_lower for k in ["di-ammonium", "diammonium", "dap"]):
+                return True
+            continue
+        if a_lower in raw_lower:
+            return True
+    return False
+
+
+def parse_all_target_data(html_pages: Union[str, List[str]]) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, Dict[str, Any]]:
     """
     Parses all collected HTML pages.
     Returns:
-      tuple: (df_currencies, df_energy_commodities, metadata)
+      tuple: (df_currencies, df_energy_commodities, df_metals_commodities, metadata)
     """
     if isinstance(html_pages, str):
         html_pages = [html_pages]
 
     matched_currencies: Dict[str, Dict[str, str]] = {}
     matched_commodities: Dict[str, Dict[str, str]] = {}
+    matched_metals: Dict[str, Dict[str, str]] = {}
     usdcny_rate = 7.24  # Standard default fallback rate
     timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -141,8 +189,10 @@ def parse_all_target_data(html_pages: Union[str, List[str]]) -> Tuple[pd.DataFra
 
                         matched_currencies[unslashed_key] = row_data
 
-            # Check if this is the Energy Commodities table
-            elif "energy" in first_header or any(c in str(tbl) for c in ["Crude Oil", "Brent", "Natural gas"]):
+            # Check if this is a Commodities table (Energy, Metals, Industrial, Agricultural)
+            elif any(k in first_header for k in ["energy", "metal", "industrial", "agricultural", "commodity"]) or any(
+                c in str(tbl) for c in ["Crude Oil", "Brent", "Copper", "HRC Steel", "Zinc"]
+            ):
                 col_indices = {col: _find_column_index(headers, col) for col in config.COMMODITY_COLUMNS}
                 if col_indices["Commodity"] == -1:
                     col_indices["Commodity"] = 0
@@ -152,9 +202,11 @@ def parse_all_target_data(html_pages: Union[str, List[str]]) -> Tuple[pd.DataFra
                     if not cells:
                         continue
 
-                    raw_item = cells[col_indices["Commodity"]].get_text(strip=True)
+                    comm_cell = cells[col_indices["Commodity"]]
+                    b_tag = comm_cell.find("b")
+                    raw_item = b_tag.get_text(strip=True) if b_tag else comm_cell.get_text(strip=True)
 
-                    # Match against our 7 target commodities (specifically check Methanol before Ethanol)
+                    # 1. Match against our 7 target Energy commodities
                     for target_name in ["Methanol", "Ethanol", "Crude Oil", "Brent", "Natural gas", "TTF Gas", "Jet Fuel"]:
                         aliases = config.TARGET_COMMODITIES.get(target_name, [])
                         if _matches_commodity_alias(target_name, aliases, raw_item):
@@ -167,6 +219,39 @@ def parse_all_target_data(html_pages: Union[str, List[str]]) -> Tuple[pd.DataFra
                                     row_data[col_name] = "N/A"
 
                             matched_commodities[target_name] = row_data
+                            break
+
+                    # 2. Match against our 13 target Metals & Industrial commodities
+                    for metal_spec in config.METALS_COMMODITIES:
+                        m_name = metal_spec["commodity"]
+                        aliases = metal_spec.get("aliases", [m_name])
+                        factor = metal_spec.get("factor", 1)
+
+                        if _matches_metal_alias(m_name, aliases, raw_item):
+                            row_data = {"Commodity": m_name}
+                            for col_name in config.COMMODITY_COLUMNS[1:]:
+                                c_idx = col_indices[col_name]
+                                if c_idx != -1 and c_idx < len(cells):
+                                    raw_cell = _clean_cell_value(cells[c_idx].get_text(strip=True))
+                                    if col_name == "Price":
+                                        try:
+                                            num_p = float(raw_cell.replace(",", ""))
+                                            factored_p = num_p * factor
+                                            if factor != 1:
+                                                row_data["Price"] = f"{factored_p:,.2f}"
+                                                logger.info(
+                                                    f"Factored {m_name}: {raw_cell} * {factor} -> {factored_p:,.2f}"
+                                                )
+                                            else:
+                                                row_data["Price"] = f"{factored_p:,.2f}" if "." in raw_cell else f"{factored_p:,.0f}"
+                                        except Exception:
+                                            row_data["Price"] = raw_cell
+                                    else:
+                                        row_data[col_name] = raw_cell
+                                else:
+                                    row_data[col_name] = "N/A"
+
+                            matched_metals[m_name] = row_data
                             break
 
     # Format Currencies DataFrame
@@ -208,11 +293,29 @@ def parse_all_target_data(html_pages: Union[str, List[str]]) -> Tuple[pd.DataFra
 
     df_energy = pd.DataFrame(ordered_comm_rows)[config.COMMODITY_COLUMNS] if ordered_comm_rows else pd.DataFrame(columns=config.COMMODITY_COLUMNS)
 
+    # Format Metals & Industrial Commodities DataFrame
+    ordered_metal_rows = []
+    for metal_spec in config.METALS_COMMODITIES:
+        target_metal = metal_spec["commodity"]
+        if target_metal in matched_metals:
+            ordered_metal_rows.append(matched_metals[target_metal])
+        else:
+            ordered_metal_rows.append({
+                "Commodity": target_metal,
+                "Price": "N/A",
+                "Weekly": "N/A",
+                "Monthly": "N/A",
+                "YoY": "N/A"
+            })
+
+    df_metals = pd.DataFrame(ordered_metal_rows)[config.COMMODITY_COLUMNS] if ordered_metal_rows else pd.DataFrame(columns=config.COMMODITY_COLUMNS)
+
     metadata = {
         "timestamp": timestamp_str,
         "currencies_count": len(df_currencies),
         "energy_count": len(df_energy),
+        "metals_count": len(df_metals),
         "usdcny_factor": usdcny_rate,
     }
 
-    return df_currencies, df_energy, metadata
+    return df_currencies, df_energy, df_metals, metadata

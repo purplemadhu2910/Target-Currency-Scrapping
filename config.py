@@ -19,6 +19,7 @@ EXCEL_FILE = OUTPUT_DIR / "extracted_data.xlsx"
 EXCEL_SHEET_LIVE = "Live_Rates"
 EXCEL_SHEET_HISTORY = "History_Log"
 EXCEL_SHEET_ENERGY = "Energy_Commodities"
+EXCEL_SHEET_METALS = "Metals_Commodities"
 
 # Log file path
 LOG_FILE = LOGS_DIR / "scraper.log"
@@ -52,12 +53,29 @@ TARGET_COMMODITIES = {
     "Jet Fuel": ["Jet Fuel", "Kerosene"]
 }
 
+# --- SPECIFIC TARGET METALS & INDUSTRIAL COMMODITIES ---
+METALS_COMMODITIES = [
+    {"commodity": "HRC Steel", "factor": 1, "aliases": ["HRC Steel"]},
+    {"commodity": "Copper", "factor": 2204.62, "aliases": ["Copper"]},
+    {"commodity": "Aluminum Alloy", "factor": 1, "aliases": ["Aluminum Alloy"]},
+    {"commodity": "TinUSD", "factor": 1, "aliases": ["Tin", "TinUSD"]},
+    {"commodity": "Zinc", "factor": 1, "aliases": ["Zinc"]},
+    {"commodity": "Nickel", "factor": 1, "aliases": ["Nickel"]},
+    {"commodity": "Platinum", "factor": 1, "aliases": ["Platinum"]},
+    {"commodity": "Palladium", "factor": 1, "aliases": ["Palladium"]},
+    {"commodity": "Rhodium", "factor": 1, "aliases": ["Rhodium"]},
+    {"commodity": "Lead", "factor": 1, "aliases": ["Lead"]},
+    {"commodity": "Lithium", "factor": 1, "aliases": ["Lithium"]},
+    {"commodity": "Urea", "factor": 1, "aliases": ["Urea"]},
+    {"commodity": "Di-ammonium", "factor": 1, "aliases": ["Di-ammonium", "Di-Ammonium", "DAP"]},
+]
+
 # Target URLs needed to capture currencies + energy commodities from Trading Economics
 TARGET_URLS = [
     "https://tradingeconomics.com/currencies",           # Contains USD/INR, USD/JPY, EUR/USD, USD/CNY
     "https://tradingeconomics.com/currencies?base=eur",  # Contains EUR/INR
     "https://tradingeconomics.com/currencies?base=jpy",  # Contains JPY/INR
-    "https://tradingeconomics.com/commodities",          # Contains Energy commodities table
+    "https://tradingeconomics.com/commodities",          # Contains Energy, Metals, Industrial tables
 ]
 
 # Columns configuration
@@ -67,7 +85,7 @@ HISTORY_COLUMNS = ["Timestamp", "Crosses", "Price", "Weekly", "Monthly", "YoY"]
 
 # Column mapping aliases to match dynamic website header text
 COLUMN_ALIASES = {
-    "Crosses": ["Crosses", "Symbol", "Major", "Europe", "America", "Asia", "Oceania", "Africa", "Currency", "Commodity", "Energy"],
+    "Crosses": ["Crosses", "Symbol", "Major", "Europe", "America", "Asia", "Oceania", "Africa", "Currency", "Commodity", "Energy", "Metals", "Industrial"],
     "Price": ["Price", "Last"],
     "Weekly": ["Weekly", "1W", "Week"],
     "Monthly": ["Monthly", "1M", "Month"],
