@@ -14,15 +14,16 @@ LOGS_DIR = BASE_DIR / "logs"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
-# Excel output file path
+# Excel output file path and sheet names
 EXCEL_FILE = OUTPUT_DIR / "extracted_data.xlsx"
-EXCEL_SHEET_NAME = "Currencies"
+EXCEL_SHEET_LIVE = "Live_Rates"
+EXCEL_SHEET_HISTORY = "History_Log"
+EXCEL_SHEET_ENERGY = "Energy_Commodities"
 
 # Log file path
 LOG_FILE = LOGS_DIR / "scraper.log"
 
 # --- SPECIFIC TARGET CURRENCY PAIRS ---
-# The exact 5 currency pairs requested by the user
 TARGET_PAIRS_DISPLAY = [
     "USD/INR",
     "EUR/INR",
@@ -40,19 +41,33 @@ TARGET_PAIRS_MAP = {
     "EURUSD": "EUR/USD"
 }
 
-# Target URLs needed to capture all 5 pairs from Trading Economics
+# --- SPECIFIC TARGET ENERGY COMMODITIES ---
+TARGET_COMMODITIES = {
+    "Crude Oil": ["Crude Oil"],
+    "Brent": ["Brent"],
+    "Natural gas": ["Natural gas"],
+    "TTF Gas": ["EU Gas", "TTF Gas", "Dutch TTF"],
+    "Ethanol": ["Ethanol"],
+    "Methanol": ["Methanol"],
+    "Jet Fuel": ["Jet Fuel", "Kerosene"]
+}
+
+# Target URLs needed to capture currencies + energy commodities from Trading Economics
 TARGET_URLS = [
-    "https://tradingeconomics.com/currencies",           # Contains USD/INR, USD/JPY, EUR/USD
+    "https://tradingeconomics.com/currencies",           # Contains USD/INR, USD/JPY, EUR/USD, USD/CNY
     "https://tradingeconomics.com/currencies?base=eur",  # Contains EUR/INR
     "https://tradingeconomics.com/currencies?base=jpy",  # Contains JPY/INR
+    "https://tradingeconomics.com/commodities",          # Contains Energy commodities table
 ]
 
-# The required columns (YTD excluded per user request)
+# Columns configuration
 REQUIRED_COLUMNS = ["Crosses", "Price", "Weekly", "Monthly", "YoY"]
+COMMODITY_COLUMNS = ["Commodity", "Price", "Weekly", "Monthly", "YoY"]
+HISTORY_COLUMNS = ["Timestamp", "Crosses", "Price", "Weekly", "Monthly", "YoY"]
 
 # Column mapping aliases to match dynamic website header text
 COLUMN_ALIASES = {
-    "Crosses": ["Crosses", "Symbol", "Major", "Europe", "America", "Asia", "Oceania", "Africa", "Currency"],
+    "Crosses": ["Crosses", "Symbol", "Major", "Europe", "America", "Asia", "Oceania", "Africa", "Currency", "Commodity", "Energy"],
     "Price": ["Price", "Last"],
     "Weekly": ["Weekly", "1W", "Week"],
     "Monthly": ["Monthly", "1M", "Month"],

@@ -297,3 +297,106 @@ Symbols not available. Dumping unresolved backtrace:
 2026-11-20 16:00:31 [INFO] [Scraper] Browser session closed cleanly.
 2026-11-20 16:00:31 [ERROR] [Main] Extraction aborted: Unable to retrieve rendered HTML from target pages.
 2026-11-20 16:00:31 [ERROR] [Main] Manual extraction failed.
+2026-11-24 09:06:05 [INFO] [Main] Executing Manual Mode...
+2026-11-24 09:06:05 [INFO] [Main] Starting target extraction cycle (Mode: Manual)...
+2026-11-24 09:06:05 [INFO] [Scraper] Initializing Chrome browser session for 3 target page(s)...
+2026-11-24 09:06:13 [INFO] [Scraper] Fetching URL [1/3] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-24 09:06:24 [INFO] [Scraper] Successfully loaded page 1: 728,262 characters.
+2026-11-24 09:06:24 [INFO] [Scraper] Fetching URL [2/3] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-24 09:06:32 [INFO] [Scraper] Successfully loaded page 2: 701,365 characters.
+2026-11-24 09:06:32 [INFO] [Scraper] Fetching URL [3/3] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-24 09:06:44 [INFO] [Scraper] Successfully loaded page 3: 702,282 characters.
+2026-11-24 09:06:48 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-24 09:06:50 [INFO] [DataProcessor] Price for JPY/INR is < 1 (0.58424); multiplied by 100 -> 58.4240
+2026-11-24 09:06:50 [INFO] [DataProcessor] Target extraction completed: 5/5 pairs found (USD/INR, EUR/INR, JPY/INR, USD/JPY, EUR/USD).
+2026-11-24 09:06:50 [INFO] [ExcelWriter] Successfully saved 5 target pairs into Excel: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-24 09:06:50 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-24 09:06:50 [INFO] [Main] Manual extraction completed successfully.
+2026-11-24 09:25:44 [INFO] [Main] Executing Manual Mode...
+2026-11-24 09:25:44 [INFO] [Main] Starting target extraction cycle (Mode: Manual)...
+2026-11-24 09:25:44 [INFO] [Scraper] Initializing Chrome browser session for 3 target page(s)...
+2026-11-24 09:25:48 [INFO] [Scraper] Fetching URL [1/3] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-24 09:26:05 [INFO] [Scraper] Successfully loaded page 1: 725,845 characters.
+2026-11-24 09:26:05 [INFO] [Scraper] Fetching URL [2/3] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-24 09:26:10 [INFO] [Scraper] Successfully loaded page 2: 698,485 characters.
+2026-11-24 09:26:10 [INFO] [Scraper] Fetching URL [3/3] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-24 09:26:15 [INFO] [Scraper] Successfully loaded page 3: 698,489 characters.
+2026-11-24 09:26:18 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-24 09:26:19 [INFO] [DataProcessor] Price for JPY/INR is < 1 (0.58424); multiplied by 100 -> 58.4240
+2026-11-24 09:26:19 [INFO] [DataProcessor] Target extraction completed: 5/5 pairs found (USD/INR, EUR/INR, JPY/INR, USD/JPY, EUR/USD).
+2026-11-24 09:26:20 [INFO] [ExcelWriter] Successfully saved to Excel! Live sheet updated, History log now has 5 total historical records.
+2026-11-24 09:26:20 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-24 09:26:20 [INFO] [Main] Manual extraction completed successfully.
+2026-11-24 09:31:38 [INFO] [Main] Executing Manual Mode...
+2026-11-24 09:31:38 [INFO] [Main] Starting target extraction cycle (Mode: Manual)...
+2026-11-24 09:31:38 [INFO] [Scraper] Initializing Chrome browser session for 3 target page(s)...
+2026-11-24 09:31:42 [INFO] [Scraper] Fetching URL [1/3] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-24 09:31:53 [INFO] [Scraper] Successfully loaded page 1: 730,489 characters.
+2026-11-24 09:31:53 [INFO] [Scraper] Fetching URL [2/3] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-24 09:31:59 [INFO] [Scraper] Successfully loaded page 2: 737,055 characters.
+2026-11-24 09:31:59 [INFO] [Scraper] Fetching URL [3/3] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-24 09:32:06 [INFO] [Scraper] Successfully loaded page 3: 702,237 characters.
+2026-11-24 09:32:08 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-24 09:32:10 [INFO] [DataProcessor] Price for JPY/INR is < 1 (0.58424); multiplied by 100 -> 58.4240
+2026-11-24 09:32:10 [INFO] [DataProcessor] Target extraction completed: 5/5 pairs found (USD/INR, EUR/INR, JPY/INR, USD/JPY, EUR/USD).
+2026-11-24 09:32:10 [INFO] [ExcelWriter] Successfully saved to Excel! Live sheet updated, History log now has 10 total historical records.
+2026-11-24 09:32:10 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-24 09:32:10 [INFO] [Main] Manual extraction completed successfully.
+2026-11-24 10:36:34 [INFO] [Main] Executing Manual Mode...
+2026-11-24 10:36:34 [INFO] [Main] Starting extraction cycle (Mode: Manual)...
+2026-11-24 10:36:34 [INFO] [Scraper] Initializing Chrome browser session for 4 target page(s)...
+2026-11-24 10:36:38 [INFO] [Scraper] Fetching URL [1/4] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-24 10:37:01 [INFO] [Scraper] Successfully loaded page 1: 705,043 characters.
+2026-11-24 10:37:01 [INFO] [Scraper] Fetching URL [2/4] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-24 10:37:17 [INFO] [Scraper] Successfully loaded page 2: 699,804 characters.
+2026-11-24 10:37:17 [INFO] [Scraper] Fetching URL [3/4] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-24 10:37:23 [INFO] [Scraper] Successfully loaded page 3: 700,799 characters.
+2026-11-24 10:37:23 [INFO] [Scraper] Fetching URL [4/4] (Attempt 1): https://tradingeconomics.com/commodities
+2026-11-24 10:37:28 [INFO] [Scraper] Successfully loaded page 4: 561,737 characters.
+2026-11-24 10:37:33 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-24 10:37:34 [INFO] [DataProcessor] Captured live USDCNY exchange rate: 6.66133
+2026-11-24 10:37:34 [INFO] [DataProcessor] Captured live USDCNY exchange rate: 6.66133
+2026-11-24 10:37:35 [INFO] [DataProcessor] Price for JPY/INR is < 1; multiplied by 100 -> 58.4240
+2026-11-24 10:37:36 [INFO] [ExcelWriter] Successfully saved to Excel: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx (All 3 sheets updated).
+2026-11-24 10:37:36 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-24 10:37:36 [INFO] [Main] Manual extraction completed successfully.
+2026-11-24 10:38:32 [INFO] [Main] Executing Manual Mode...
+2026-11-24 10:38:32 [INFO] [Main] Starting extraction cycle (Mode: Manual)...
+2026-11-24 10:38:32 [INFO] [Scraper] Initializing Chrome browser session for 4 target page(s)...
+2026-11-24 10:38:34 [INFO] [Scraper] Fetching URL [1/4] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-24 10:39:03 [INFO] [Scraper] Successfully loaded page 1: 726,188 characters.
+2026-11-24 10:39:03 [INFO] [Scraper] Fetching URL [2/4] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-24 10:39:18 [INFO] [Scraper] Successfully loaded page 2: 698,591 characters.
+2026-11-24 10:39:18 [INFO] [Scraper] Fetching URL [3/4] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-24 10:39:30 [INFO] [Scraper] Successfully loaded page 3: 700,519 characters.
+2026-11-24 10:39:30 [INFO] [Scraper] Fetching URL [4/4] (Attempt 1): https://tradingeconomics.com/commodities
+2026-11-24 10:39:46 [INFO] [Main] Executing Manual Mode...
+2026-11-24 10:39:46 [INFO] [Main] Starting extraction cycle (Mode: Manual)...
+2026-11-24 10:39:46 [INFO] [Scraper] Initializing Chrome browser session for 4 target page(s)...
+2026-11-24 10:39:49 [INFO] [Scraper] Fetching URL [1/4] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-24 10:39:58 [INFO] [Scraper] Successfully loaded page 4: 557,977 characters.
+2026-11-24 10:40:09 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-24 10:40:10 [INFO] [DataProcessor] Captured live USDCNY exchange rate: 6.66117
+2026-11-24 10:40:10 [INFO] [DataProcessor] Captured live USDCNY exchange rate: 6.66117
+2026-11-24 10:40:11 [INFO] [DataProcessor] Price for JPY/INR is < 1; multiplied by 100 -> 58.4240
+2026-11-24 10:40:11 [INFO] [Scraper] Successfully loaded page 1: 724,391 characters.
+2026-11-24 10:40:11 [INFO] [Scraper] Fetching URL [2/4] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-24 10:40:12 [INFO] [DataProcessor] Factored Methanol price: 3291.0 CNY / 6.66117 USDCNY -> 494.06 USD/T
+2026-11-24 10:40:12 [INFO] [ExcelWriter] Successfully saved to Excel: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx (All 3 sheets updated).
+2026-11-24 10:40:12 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-24 10:40:12 [INFO] [Main] Manual extraction completed successfully.
+2026-11-24 10:40:41 [WARNING] [Scraper] Timeout on page [2/4] attempt 1.
+2026-11-24 10:40:45 [INFO] [Scraper] Fetching URL [2/4] (Attempt 2): https://tradingeconomics.com/currencies?base=eur
+2026-11-24 10:41:04 [INFO] [Scraper] Successfully loaded page 2: 698,912 characters.
+2026-11-24 10:41:04 [INFO] [Scraper] Fetching URL [3/4] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-24 10:41:14 [INFO] [Scraper] Successfully loaded page 3: 699,450 characters.
+2026-11-24 10:41:14 [INFO] [Scraper] Fetching URL [4/4] (Attempt 1): https://tradingeconomics.com/commodities
+2026-11-24 10:41:20 [INFO] [Scraper] Successfully loaded page 4: 560,846 characters.
+2026-11-24 10:41:22 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-24 10:41:23 [INFO] [DataProcessor] Captured live USDCNY exchange rate: 6.6612
+2026-11-24 10:41:23 [INFO] [DataProcessor] Captured live USDCNY exchange rate: 6.6612
+2026-11-24 10:41:24 [INFO] [DataProcessor] Price for JPY/INR is < 1; multiplied by 100 -> 58.4240
+2026-11-24 10:41:24 [INFO] [DataProcessor] Factored Methanol price: 3291.0 CNY / 6.6612 USDCNY -> 494.06 USD/T
+2026-11-24 10:41:25 [INFO] [ExcelWriter] Successfully saved to Excel: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx (All 3 sheets updated).
+2026-11-24 10:41:25 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx
+2026-11-24 10:41:25 [INFO] [Main] Manual extraction completed successfully.

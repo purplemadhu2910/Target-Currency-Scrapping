@@ -12,6 +12,10 @@ env/
 logs/*.log
 !logs/.gitkeep
 
+# Temporary lock fallback
+output/*_latest.xlsx
+*_latest.xlsx
+
 # IDE and Editor settings
 .vscode/
 .idea/

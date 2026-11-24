@@ -1,24 +1,27 @@
 """
 Main Orchestrator Module.
-Provides the Command Line Interface (CLI) for running the target currency scraper:
-Extracts exclusively: USD/INR, EUR/INR, JPY/INR, USD/JPY, EUR/USD.
+Extracts:
+  1. Target Currencies: USD/INR, EUR/INR, JPY/INR, USD/JPY, EUR/USD
+  2. Energy Commodities: Crude Oil, Brent, Natural gas, TTF Gas, Ethanol, Methanol (factored by USDCNY), Jet Fuel
 Supports:
-  1. Manual mode: Single run on demand.
-  2. Periodic mode: Automatic extraction every N minutes.
-  3. Continuous monitoring mode: Continuous polling with change detection.
+  - Manual mode: Single run on demand.
+  - Periodic mode: Automatic extraction every N minutes.
+  - Continuous monitoring mode: Continuous polling with change detection.
+  - Daily mode: Runs everyday at set time (e.g. 15:00 / 3:00 PM).
 """
 
 import sys
 import time
 import argparse
 import logging
-from typing import Optional, Dict, Any
+from datetime import datetime, timedelta
+from typing import Optional, Dict, Any, Tuple
 import pandas as pd
 from tabulate import tabulate
 
 import config
 from scraper import fetch_all_pages_html
-from data_processing import parse_target_currencies
+from data_processing import parse_all_target_data
 from excel_writer import save_or_update_excel
 
 
@@ -42,89 +45,104 @@ def setup_logging():
 logger = logging.getLogger("Main")
 
 
-def display_terminal_output(df: pd.DataFrame, metadata: Dict[str, Any], mode_name: str):
+def display_terminal_output(
+    df_currencies: pd.DataFrame,
+    df_energy: pd.DataFrame,
+    metadata: Dict[str, Any],
+    mode_name: str
+):
     """
     Prints a clean, formatted report directly to the terminal,
-    displaying the 5 target currency pairs and execution metadata.
+    displaying both Target Currencies and Energy Commodities.
     """
     separator = "=" * 80
     sub_sep = "-" * 80
 
     print("\n" + separator)
-    print("          TARGET CURRENCY EXTRACTION REPORT - TRADING ECONOMICS")
+    print("      LIVE MARKET DATA EXTRACTION REPORT (CURRENCIES & ENERGY COMMODITIES)")
     print(separator)
     print(f"Extraction Timestamp : {metadata.get('timestamp')}")
     print(f"Execution Mode       : {mode_name.capitalize()}")
-    print(f"Target Pairs Found   : {len(df)} / {len(config.TARGET_PAIRS_DISPLAY)}")
+    print(f"Live USD/CNY Factor  : {metadata.get('usdcny_factor')}")
     print(f"Target Excel Path    : {config.EXCEL_FILE}")
     print(sub_sep)
 
-    found_list = metadata.get("found_pairs", [])
-    missing_list = metadata.get("missing_pairs", [])
-    print(f"Pairs Captured : {', '.join(found_list) if found_list else 'None'}")
-    if missing_list:
-        print(f"Pairs Missing  : {', '.join(missing_list)}")
-    print(sub_sep)
-
-    if not df.empty:
-        table_str = tabulate(
-            df,
+    # 1. Currencies Table
+    print("📈 SECTION 1: TARGET CURRENCY PAIRS (Sheets: Live_Rates & History_Log)")
+    if not df_currencies.empty:
+        curr_table = tabulate(
+            df_currencies,
             headers="keys",
             tablefmt="grid",
             showindex=False,
             stralign="right",
             numalign="right",
         )
-        print(table_str)
+        print(curr_table)
     else:
-        print("  [!] None of the target currency records were extracted.")
+        print("  [!] No currency records extracted.")
+
+    print("\n" + sub_sep)
+
+    # 2. Energy Commodities Table
+    print("⚡ SECTION 2: ENERGY COMMODITIES (Sheet: Energy_Commodities)")
+    if not df_energy.empty:
+        energy_table = tabulate(
+            df_energy,
+            headers="keys",
+            tablefmt="grid",
+            showindex=False,
+            stralign="right",
+            numalign="right",
+        )
+        print(energy_table)
+    else:
+        print("  [!] No energy commodities extracted.")
 
     print(separator + "\n")
 
 
-def execute_extraction(mode_name: str) -> Optional[pd.DataFrame]:
+def execute_extraction(mode_name: str) -> Tuple[Optional[pd.DataFrame], Optional[pd.DataFrame]]:
     """
     Executes a single extraction lifecycle:
-      1. Fetches rendered HTML across target pages.
-      2. Parses data into a DataFrame with 6 columns for the 5 target pairs.
+      1. Fetches rendered HTML across target pages (currencies & commodities).
+      2. Parses data into DataFrames.
       3. Displays results in terminal.
-      4. Saves/updates Excel workbook.
-
-    Returns:
-        pd.DataFrame or None: The extracted DataFrame if successful.
+      4. Saves/updates Excel workbook across all 3 sheets.
     """
-    logger.info(f"Starting target extraction cycle (Mode: {mode_name})...")
+    logger.info(f"Starting extraction cycle (Mode: {mode_name})...")
 
     # 1. Fetch live HTML pages using single browser session
     html_pages = fetch_all_pages_html()
     if not html_pages:
         logger.error("Extraction aborted: Unable to retrieve rendered HTML from target pages.")
-        return None
+        return None, None
 
-    # 2. Parse tables and filter for target 5 pairs
-    df, metadata = parse_target_currencies(html_pages)
-    if df.empty:
-        logger.warning("No target currency pairs were found on the pages.")
-        return None
+    # 2. Parse tables for Currencies + Energy Commodities
+    df_currencies, df_energy, metadata = parse_all_target_data(html_pages)
+    if df_currencies.empty and df_energy.empty:
+        logger.warning("No data extracted from target pages.")
+        return None, None
 
     # 3. Print tabular results in terminal
-    display_terminal_output(df, metadata, mode_name)
+    display_terminal_output(df_currencies, df_energy, metadata, mode_name)
 
-    # 4. Save to Excel workbook
-    excel_success = save_or_update_excel(df, config.EXCEL_FILE)
+    # 4. Save to Excel workbook across 3 sheets
+    timestamp = metadata.get("timestamp")
+    excel_success = save_or_update_excel(df_currencies, df_energy, config.EXCEL_FILE, timestamp_str=timestamp)
     if excel_success:
         logger.info(f"[SUCCESS] Excel workbook updated successfully: {config.EXCEL_FILE}")
     else:
         logger.warning(f"[WARNING] Failed to update Excel workbook at: {config.EXCEL_FILE}")
 
-    return df
+    return df_currencies, df_energy
 
 
 def run_manual_mode():
     """Runs a single on-demand extraction."""
     logger.info("Executing Manual Mode...")
-    df = execute_extraction(mode_name="Manual")
-    if df is not None:
+    df_c, df_e = execute_extraction(mode_name="Manual")
+    if df_c is not None or df_e is not None:
         logger.info("Manual extraction completed successfully.")
     else:
         logger.error("Manual extraction failed.")
@@ -149,10 +167,7 @@ def run_periodic_mode(interval_minutes: int):
 
 
 def run_continuous_mode(poll_seconds: int):
-    """
-    Continuously monitors the 5 target pairs, captures price updates,
-    and updates the Excel workbook when prices change.
-    """
+    """Continuously monitors target assets, captures price updates, and updates Excel."""
     logger.info(f"Starting Continuous Monitoring Mode (Polling every {poll_seconds}s).")
     print(f"[*] Continuous monitoring started. Press Ctrl+C at any time to stop.\n")
 
@@ -164,30 +179,31 @@ def run_continuous_mode(poll_seconds: int):
             logger.info(f"--- Continuous Polling Cycle #{cycle} ---")
             html_pages = fetch_all_pages_html()
             if html_pages:
-                df, metadata = parse_target_currencies(html_pages)
-                if not df.empty:
-                    current_prices = dict(zip(df["Crosses"], df["Price"]))
-                    changes = []
+                df_c, df_e, metadata = parse_all_target_data(html_pages)
+                current_prices = {}
+                if not df_c.empty:
+                    current_prices.update(dict(zip(df_c["Crosses"], df_c["Price"])))
+                if not df_e.empty:
+                    current_prices.update(dict(zip(df_e["Commodity"], df_e["Price"])))
 
-                    for cross, current_price in current_prices.items():
-                        prev_price = previous_prices.get(cross)
-                        if prev_price is not None and prev_price != current_price:
-                            changes.append(f"{cross}: {prev_price} -> {current_price}")
+                changes = []
+                for item, current_price in current_prices.items():
+                    prev_price = previous_prices.get(item)
+                    if prev_price is not None and prev_price != current_price:
+                        changes.append(f"{item}: {prev_price} -> {current_price}")
 
-                    if not previous_prices:
-                        # Initial baseline
-                        logger.info("Initial baseline captured for target pairs. Writing to Excel...")
-                        display_terminal_output(df, metadata, mode_name=f"Continuous (Cycle #{cycle})")
-                        save_or_update_excel(df, config.EXCEL_FILE)
-                        previous_prices = current_prices
-                    elif changes:
-                        # Updates detected
-                        logger.info(f"Detected {len(changes)} price changes: {', '.join(changes)}")
-                        display_terminal_output(df, metadata, mode_name=f"Continuous (Cycle #{cycle} - UPDATES)")
-                        save_or_update_excel(df, config.EXCEL_FILE)
-                        previous_prices = current_prices
-                    else:
-                        logger.info("No price changes detected among target pairs.")
+                if not previous_prices:
+                    logger.info("Initial baseline captured. Writing to Excel...")
+                    display_terminal_output(df_c, df_e, metadata, mode_name=f"Continuous (Cycle #{cycle})")
+                    save_or_update_excel(df_c, df_e, config.EXCEL_FILE, timestamp_str=metadata.get("timestamp"))
+                    previous_prices = current_prices
+                elif changes:
+                    logger.info(f"Detected {len(changes)} price changes: {', '.join(changes)}")
+                    display_terminal_output(df_c, df_e, metadata, mode_name=f"Continuous (Cycle #{cycle} - UPDATES)")
+                    save_or_update_excel(df_c, df_e, config.EXCEL_FILE, timestamp_str=metadata.get("timestamp"))
+                    previous_prices = current_prices
+                else:
+                    logger.info("No price changes detected among target assets.")
             else:
                 logger.warning("Could not fetch pages in continuous cycle.")
 
@@ -199,16 +215,53 @@ def run_continuous_mode(poll_seconds: int):
         logger.info("Continuous mode terminated by user.")
 
 
+def run_daily_mode(target_time_str: str = "15:00"):
+    """Runs extraction daily at a specific 24-hour time (e.g., '15:00' for 3:00 PM)."""
+    logger.info(f"Starting Daily Scheduled Mode. Scheduled for: {target_time_str} everyday.")
+    print(f"[*] Daily automation active. Scheduled to run at {target_time_str} everyday.")
+    print(f"[*] Press Ctrl+C at any time to stop.\n")
+
+    try:
+        target_hour, target_minute = map(int, target_time_str.split(":"))
+    except Exception:
+        logger.error(f"Invalid time format '{target_time_str}'. Please use HH:MM (e.g. 15:00).")
+        return
+
+    try:
+        while True:
+            now = datetime.now()
+            target_today = now.replace(hour=target_hour, minute=target_minute, second=0, microsecond=0)
+
+            if now >= target_today:
+                next_run = target_today + timedelta(days=1)
+            else:
+                next_run = target_today
+
+            seconds_to_wait = (next_run - now).total_seconds()
+            hours_to_wait = seconds_to_wait / 3600
+            logger.info(f"Next scheduled extraction: {next_run.strftime('%Y-%m-%d %H:%M:%S')} (in {hours_to_wait:.2f} hours).")
+
+            time.sleep(seconds_to_wait)
+
+            logger.info(f"Scheduled time reached ({target_time_str})! Triggering daily extraction...")
+            execute_extraction(mode_name=f"Daily ({target_time_str})")
+            time.sleep(120)
+
+    except KeyboardInterrupt:
+        print("\n[*] Daily schedule stopped by user.")
+        logger.info("Daily schedule terminated by user.")
+
+
 def main():
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
-        description="Target Currency Data Extraction & Excel Automation System"
+        description="Live Market Data Extraction (Currencies & Energy Commodities)"
     )
     parser.add_argument(
         "--mode",
-        choices=["manual", "periodic", "continuous"],
+        choices=["manual", "periodic", "continuous", "daily"],
         default="manual",
-        help="Execution mode: manual (single run), periodic (every N minutes), or continuous (change monitoring)",
+        help="Execution mode: manual, periodic, continuous, or daily",
     )
     parser.add_argument(
         "--interval",
@@ -222,6 +275,12 @@ def main():
         default=config.DEFAULT_CONTINUOUS_POLL_SEC,
         help=f"Polling delay in seconds for continuous mode (default: {config.DEFAULT_CONTINUOUS_POLL_SEC})",
     )
+    parser.add_argument(
+        "--time",
+        type=str,
+        default="15:00",
+        help="Daily execution time in 24-hr format HH:MM (default: 15:00 for 3:00 PM)",
+    )
 
     args = parser.parse_args()
 
@@ -233,6 +292,8 @@ def main():
         run_periodic_mode(args.interval)
     elif args.mode == "continuous":
         run_continuous_mode(args.poll)
+    elif args.mode == "daily":
+        run_daily_mode(args.time)
 
 
 if __name__ == "__main__":

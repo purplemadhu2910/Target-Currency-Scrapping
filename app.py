@@ -1,7 +1,7 @@
 """
-Streamlit Web Dashboard for Live Currency Scraping & Excel Automation.
+Streamlit Web Dashboard for Live Currency & Energy Commodities Automation.
 Run via terminal inside 'wsp':
-    streamlit run app.py
+    python -m streamlit run app.py
 """
 
 from pathlib import Path
@@ -13,12 +13,12 @@ import streamlit as st
 
 import config
 from scraper import fetch_all_pages_html
-from data_processing import parse_target_currencies
+from data_processing import parse_all_target_data
 from excel_writer import save_or_update_excel
 
 # Page configuration
 st.set_page_config(
-    page_title="Live Currency Automation Dashboard",
+    page_title="Live Market Automation Dashboard",
     page_icon="📈",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -39,67 +39,79 @@ st.markdown(
         color: #555555;
         margin-bottom: 1.5rem;
     }
-    .metric-card {
-        background-color: #F8F9FA;
-        border: 1px solid #E5E7EB;
-        border-radius: 10px;
-        padding: 15px;
-        text-align: center;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
 
-def load_existing_data() -> pd.DataFrame:
-    """Loads current data from the Excel file if it exists."""
+def _get_target_excel_file():
     target_file = config.EXCEL_FILE
     root_file = config.BASE_DIR / "extracted_data.xlsx"
-
-    file_to_read = None
     if target_file.exists():
-        file_to_read = target_file
+        return target_file
     elif root_file.exists():
-        file_to_read = root_file
+        return root_file
+    return None
 
-    if file_to_read:
+
+def load_live_currencies() -> pd.DataFrame:
+    """Loads current live currency data from Live_Rates sheet."""
+    f = _get_target_excel_file()
+    if f:
         try:
-            df = pd.read_excel(file_to_read)
-            return df
+            return pd.read_excel(f, sheet_name=config.EXCEL_SHEET_LIVE)
+        except Exception:
+            return pd.DataFrame()
+    return pd.DataFrame()
+
+
+def load_history_currencies() -> pd.DataFrame:
+    """Loads all historical currency runs from History_Log sheet."""
+    f = _get_target_excel_file()
+    if f:
+        try:
+            return pd.read_excel(f, sheet_name=config.EXCEL_SHEET_HISTORY)
+        except Exception:
+            return pd.DataFrame()
+    return pd.DataFrame()
+
+
+def load_energy_commodities() -> pd.DataFrame:
+    """Loads energy commodities from Energy_Commodities sheet."""
+    f = _get_target_excel_file()
+    if f:
+        try:
+            return pd.read_excel(f, sheet_name=config.EXCEL_SHEET_ENERGY)
         except Exception:
             return pd.DataFrame()
     return pd.DataFrame()
 
 
 def run_live_scrape():
-    """Triggers the scraper and updates Excel."""
-    with st.spinner("Connecting to Trading Economics & extracting live rates via headless Chrome..."):
+    """Triggers the scraper for currencies & commodities and updates Excel."""
+    with st.spinner("Connecting to Trading Economics & extracting live Currencies and Energy Commodities..."):
         html_pages = fetch_all_pages_html()
         if not html_pages:
             st.error("Failed to retrieve live webpage content.")
-            return None
+            return None, None
 
-        df, metadata = parse_target_currencies(html_pages)
-        if df.empty:
-            st.error("No target currency pairs were extracted.")
-            return None
-
-        save_or_update_excel(df, config.EXCEL_FILE)
-        st.success(f"Successfully updated at {metadata.get('timestamp')}!")
-        return df
+        df_c, df_e, metadata = parse_all_target_data(html_pages)
+        timestamp = metadata.get("timestamp")
+        save_or_update_excel(df_c, df_e, config.EXCEL_FILE, timestamp_str=timestamp)
+        st.success(f"Successfully updated all 3 sheets at {timestamp}!")
+        return df_c, df_e
 
 
 # --- SIDEBAR CONTROLS ---
 with st.sidebar:
     st.image("https://img.icons8.com/fluency/96/currency-exchange.png", width=64)
     st.title("Control Panel")
-    st.write("Automated Currency Scraper & Excel Exporter")
+    st.write("Live Market Scraper & Excel Automation")
     st.divider()
 
     st.subheader("Actions")
-    scrape_clicked = st.button("🔄 Scrape & Refresh Rates Now", use_container_width=True, type="primary")
+    scrape_clicked = st.button("🔄 Scrape & Refresh All Data Now", use_container_width=True, type="primary")
 
     st.divider()
     st.subheader("Automation Settings")
@@ -113,115 +125,110 @@ with st.sidebar:
     )
 
     st.divider()
-    st.subheader("Target Pairs Tracked")
-    for pair in config.TARGET_PAIRS_DISPLAY:
-        st.markdown(f"- **{pair}**")
+    st.subheader("Target Assets")
+    st.markdown("**Currencies:** USD/INR, EUR/INR, JPY/INR, USD/JPY, EUR/USD")
+    st.markdown("**Energy:** Crude Oil, Brent, Natural gas, TTF Gas, Ethanol, Methanol, Jet Fuel")
 
     st.divider()
-    st.caption("Data Source: Trading Economics (Live Forex)")
+    st.caption("Data Source: Trading Economics (Live Forex & Commodities)")
 
 
 # --- MAIN DASHBOARD CONTENT ---
-st.markdown('<div class="main-header">📈 Live Currency Automation Dashboard</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header">📈 Live Market Automation Dashboard</div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="sub-header">Automated extraction for 5 key currency pairs • Dynamic Excel generation</div>',
+    '<div class="sub-header">Live Currencies (Forex) • Energy Commodities • Triple-Sheet Excel Automation</div>',
     unsafe_allow_html=True,
 )
 
-# Handle Manual Scrape Click
 if scrape_clicked:
-    df_current = run_live_scrape()
+    df_curr, df_energy = run_live_scrape()
 else:
-    df_current = load_existing_data()
+    df_curr = load_live_currencies()
+    df_energy = load_energy_commodities()
 
-# Check if data exists
-if df_current.empty:
-    st.info("No data found in Excel yet. Click '**Scrape & Refresh Rates Now**' in the sidebar to run the initial extraction.")
-else:
-    # 1. TOP METRIC CARDS
-    st.subheader("Key Exchange Rates (At a Glance)")
-    cols = st.columns(len(df_current))
+df_history = load_history_currencies()
 
-    for idx, (_, row) in enumerate(df_current.iterrows()):
-        pair = row.get("Crosses", "N/A")
-        price = row.get("Price", "N/A")
-        yoy = str(row.get("YoY", "0%"))
-        weekly = str(row.get("Weekly", "0%"))
+# Top Metric Cards (Currencies + Key Energy)
+if not df_curr.empty or not df_energy.empty:
+    st.subheader("Market Highlights (At a Glance)")
+    metric_cols = st.columns(5)
 
-        # Format price cleanly
-        try:
-            price_val = float(price)
-            formatted_price = f"{price_val:,.4f}"
-        except (ValueError, TypeError):
-            formatted_price = str(price)
+    # Show top 3 currencies + Crude Oil + TTF Gas
+    highlight_items = []
+    if not df_curr.empty:
+        for _, r in df_curr.head(3).iterrows():
+            highlight_items.append((r["Crosses"], r["Price"], r["YoY"], r["Weekly"]))
+    if not df_energy.empty:
+        for _, r in df_energy.iterrows():
+            if r["Commodity"] in ["Crude Oil", "TTF Gas"]:
+                highlight_items.append((r["Commodity"], r["Price"], r["YoY"], r["Weekly"]))
 
-        with cols[idx]:
+    for idx, item in enumerate(highlight_items[:5]):
+        with metric_cols[idx]:
+            try:
+                p_val = float(str(item[1]).replace(",", ""))
+                f_p = f"{p_val:,.2f}"
+            except Exception:
+                f_p = str(item[1])
             st.metric(
-                label=pair,
-                value=formatted_price,
-                delta=f"YoY: {yoy} | Wk: {weekly}",
+                label=item[0],
+                value=f_p,
+                delta=f"YoY: {item[2]} | Wk: {item[3]}",
                 delta_color="normal",
             )
 
     st.write("")
     st.divider()
 
-    # 2. TABULAR VIEW & DOWNLOAD
-    col_table_header, col_download = st.columns([3, 1])
-    with col_table_header:
-        st.subheader("Complete Currency Metrics Table")
-    with col_download:
-        # Download Excel Button
-        excel_file_path = config.EXCEL_FILE
-        if excel_file_path.exists():
-            with open(excel_file_path, "rb") as f:
-                st.download_button(
-                    label="📥 Download Excel (.xlsx)",
-                    data=f.read(),
-                    file_name="extracted_data.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    use_container_width=True,
-                )
+    # 3 TABS: LIVE CURRENCIES, ENERGY COMMODITIES, HISTORICAL LOG
+    tab_curr, tab_energy, tab_hist = st.tabs([
+        "💱 Live Currencies (Sheet 1)",
+        "⚡ Energy Commodities (Sheet 3)",
+        "📜 Currency History Log (Sheet 2)"
+    ])
 
-    # Format dataframe for display
-    st.dataframe(
-        df_current,
-        use_container_width=True,
-        hide_index=True,
-    )
+    # TAB 1: CURRENCIES
+    with tab_curr:
+        col_th, col_dl = st.columns([3, 1])
+        with col_th:
+            st.subheader("Target Currency Exchange Rates")
+        with col_dl:
+            if config.EXCEL_FILE.exists():
+                with open(config.EXCEL_FILE, "rb") as f:
+                    st.download_button(
+                        label="📥 Download Excel (.xlsx)",
+                        data=f.read(),
+                        file_name="extracted_data.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        use_container_width=True,
+                        key="dl_curr"
+                    )
 
-    # 3. COMPARISON CHART
-    st.divider()
-    st.subheader("Performance Comparison (% Change)")
+        st.dataframe(df_curr, use_container_width=True, hide_index=True)
 
-    chart_data = []
-    for _, row in df_current.iterrows():
-        pair = row["Crosses"]
-        for metric in ["Weekly", "Monthly", "YoY"]:
-            raw_pct = str(row.get(metric, "0%")).replace("%", "").strip()
-            try:
-                val = float(raw_pct)
-                chart_data.append({"Pair": pair, "Period": metric, "Change (%)": val})
-            except ValueError:
-                pass
+    # TAB 2: ENERGY COMMODITIES
+    with tab_energy:
+        st.subheader("Target Energy Commodities")
+        st.caption("Methanol price is factored by live USD/CNY rate. TTF Gas corresponds to European Natural Gas.")
+        st.dataframe(df_energy, use_container_width=True, hide_index=True)
 
-    if chart_data:
-        chart_df = pd.DataFrame(chart_data)
-        pivot_chart = chart_df.pivot(index="Pair", columns="Period", values="Change (%)")
-        st.bar_chart(pivot_chart)
-
-    # 4. ACTIVITY LOG VIEWER
-    with st.expander("📋 View Recent Scraper Activity Logs"):
-        log_file = config.LOG_FILE
-        if log_file.exists():
-            with open(log_file, "r", encoding="utf-8") as f:
-                log_lines = f.readlines()
-                recent_logs = "".join(log_lines[-20:])
-                st.code(recent_logs, language="text")
+    # TAB 3: HISTORY LOG
+    with tab_hist:
+        st.subheader("Historical Log of Currency Extractions")
+        if not df_history.empty:
+            st.caption(f"Total historical records: {len(df_history)}")
+            st.dataframe(df_history, use_container_width=True, hide_index=True)
         else:
-            st.write("No log file found yet.")
+            st.info("No historical records logged yet.")
 
-# Auto-refresh loop handler
+    # Log Viewer
+    with st.expander("📋 View Recent Scraper Activity Logs"):
+        if config.LOG_FILE.exists():
+            with open(config.LOG_FILE, "r", encoding="utf-8") as f:
+                recent_logs = "".join(f.readlines()[-20:])
+                st.code(recent_logs, language="text")
+
+# Auto-refresh loop
 if auto_refresh:
     time.sleep(refresh_interval * 60)
     st.rerun()
