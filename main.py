@@ -204,7 +204,7 @@ def run_continuous_mode(poll_seconds: int):
                 if not df_e.empty:
                     current_prices.update(dict(zip(df_e["Commodity"], df_e["Price"])))
                 if not df_m.empty:
-                    current_prices.update(dict(zip(df_m["Commodity"], df_m["Price"])))
+                    current_prices.update(dict(zip(df_m["Item"], df_m["Price"])))
 
                 changes = []
                 for item, current_price in current_prices.items():

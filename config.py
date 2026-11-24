@@ -54,20 +54,36 @@ TARGET_COMMODITIES = {
 }
 
 # --- SPECIFIC TARGET METALS & INDUSTRIAL COMMODITIES ---
+METALS_NAME_MAP = {
+    "HRC Steel": "HRC Steel, NYMEX ($/Ton)",
+    "Copper": "Copper, LME ($/Ton)",
+    "Aluminum": "Aluminium, LME ($/Ton)",
+    "TinUSD": "Tin, LME ($/Ton)",
+    "Zinc": "Zinc, LME ($/Ton)",
+    "Nickel": "Nickel, LME ($/Ton)",
+    "Platinum": "Platinum, NYMEX ($/troy oz)",
+    "Palladium": "Palladium, NYMEX ($/troy oz)",
+    "Rhodium": "Rhodium ($/troy oz)",
+    "Lead": "Lead, LME ($/Ton)",
+    "Lithium": "Lithium ($/Ton)",
+    "Urea": "Urea, CME ($/Ton)",
+    "Di-ammonium": "Di-ammonium Phosphate, CME ($/Ton)"
+}
+
 METALS_COMMODITIES = [
-    {"commodity": "HRC Steel", "factor": 1, "aliases": ["HRC Steel"]},
-    {"commodity": "Copper", "factor": 2204.62, "aliases": ["Copper"]},
-    {"commodity": "Aluminum Alloy", "factor": 1, "aliases": ["Aluminum Alloy"]},
-    {"commodity": "TinUSD", "factor": 1, "aliases": ["Tin", "TinUSD"]},
-    {"commodity": "Zinc", "factor": 1, "aliases": ["Zinc"]},
-    {"commodity": "Nickel", "factor": 1, "aliases": ["Nickel"]},
-    {"commodity": "Platinum", "factor": 1, "aliases": ["Platinum"]},
-    {"commodity": "Palladium", "factor": 1, "aliases": ["Palladium"]},
-    {"commodity": "Rhodium", "factor": 1, "aliases": ["Rhodium"]},
-    {"commodity": "Lead", "factor": 1, "aliases": ["Lead"]},
-    {"commodity": "Lithium", "factor": 1, "aliases": ["Lithium"]},
-    {"commodity": "Urea", "factor": 1, "aliases": ["Urea"]},
-    {"commodity": "Di-ammonium", "factor": 1, "aliases": ["Di-ammonium", "Di-Ammonium", "DAP"]},
+    {"commodity": "HRC Steel", "table": "Metal", "factor": 1, "aliases": ["HRC Steel"]},
+    {"commodity": "Copper", "table": "Metal", "factor": 2204.62, "aliases": ["Copper"]},
+    {"commodity": "Aluminum", "table": "Metal", "factor": 1, "aliases": ["Aluminum", "Aluminium"]},
+    {"commodity": "TinUSD", "table": "Industrial", "factor": 1, "aliases": ["Tin", "TinUSD"]},
+    {"commodity": "Zinc", "table": "Industrial", "factor": 1, "aliases": ["Zinc"]},
+    {"commodity": "Nickel", "table": "Industrial", "factor": 1, "aliases": ["Nickel"]},
+    {"commodity": "Platinum", "table": "Metal", "factor": 1, "aliases": ["Platinum"]},
+    {"commodity": "Palladium", "table": "Industrial", "factor": 1, "aliases": ["Palladium"]},
+    {"commodity": "Rhodium", "table": "Industrial", "factor": 1, "aliases": ["Rhodium"]},
+    {"commodity": "Lead", "table": "Industrial", "factor": 1, "aliases": ["Lead"]},
+    {"commodity": "Lithium", "table": "Metal", "factor": 1, "aliases": ["Lithium"]},
+    {"commodity": "Urea", "table": "Non Metal", "factor": 1, "aliases": ["Urea"]},
+    {"commodity": "Di-ammonium", "table": "Non Metal", "factor": 1, "aliases": ["Di-ammonium", "Di-Ammonium", "DAP"]},
 ]
 
 # Target URLs needed to capture currencies + energy commodities from Trading Economics
@@ -81,6 +97,7 @@ TARGET_URLS = [
 # Columns configuration
 REQUIRED_COLUMNS = ["Crosses", "Price", "Weekly", "Monthly", "YoY"]
 COMMODITY_COLUMNS = ["Commodity", "Price", "Weekly", "Monthly", "YoY"]
+METALS_COLUMNS = ["Item", "Table", "Price", "Weekly", "Monthly", "YoY"]
 HISTORY_COLUMNS = ["Timestamp", "Crosses", "Price", "Weekly", "Monthly", "YoY"]
 
 # Column mapping aliases to match dynamic website header text

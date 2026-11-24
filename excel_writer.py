@@ -251,13 +251,13 @@ def save_or_update_excel(
             else:
                 ws_metals = wb.create_sheet(title=config.EXCEL_SHEET_METALS)
 
-            for col_idx, col_name in enumerate(config.COMMODITY_COLUMNS, start=1):
+            for col_idx, col_name in enumerate(config.METALS_COLUMNS, start=1):
                 ws_metals.cell(row=1, column=col_idx, value=col_name)
-            _apply_header_styles(ws_metals, config.COMMODITY_COLUMNS)
+            _apply_header_styles(ws_metals, config.METALS_COLUMNS)
 
             for row_idx, (_, row_data) in enumerate(df_metals.iterrows(), start=2):
                 ws_metals.row_dimensions[row_idx].height = 22
-                for col_idx, col_name in enumerate(config.COMMODITY_COLUMNS, start=1):
+                for col_idx, col_name in enumerate(config.METALS_COLUMNS, start=1):
                     val = row_data[col_name]
                     cell = ws_metals.cell(row=row_idx, column=col_idx)
 
@@ -270,15 +270,19 @@ def save_or_update_excel(
                         except ValueError:
                             cell.value = val
                             cell.alignment = DATA_ALIGN_RIGHT
-                    elif col_name == "Commodity":
+                    elif col_name == "Item":
                         cell.value = val
                         cell.alignment = DATA_ALIGN_LEFT
                         cell.font = Font(name="Segoe UI", size=10, bold=True)
+                    elif col_name == "Table":
+                        cell.value = val
+                        cell.alignment = DATA_ALIGN_CENTER
+                        cell.font = Font(name="Segoe UI", size=10)
                     else:
                         cell.value = val
                         cell.alignment = DATA_ALIGN_RIGHT
 
-                    if col_name != "Commodity":
+                    if col_name not in ["Item", "Table"]:
                         cell.font = DATA_FONT
                     cell.border = BORDER_ALL_THIN
 

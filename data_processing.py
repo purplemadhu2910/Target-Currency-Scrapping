@@ -106,6 +106,10 @@ def _matches_metal_alias(target_name: str, aliases: List[str], raw_item: str) ->
             if (raw_lower == "tin" or "tin" in raw_lower) and "platinum" not in raw_lower:
                 return True
             continue
+        if a_lower in ["aluminum", "aluminium"]:
+            if raw_lower in ["aluminum", "aluminium"] or raw_lower.startswith("aluminum ") or raw_lower.startswith("aluminium "):
+                return True
+            continue
         if a_lower == "aluminum alloy":
             if "aluminum alloy" in raw_lower:
                 return True
@@ -297,18 +301,25 @@ def parse_all_target_data(html_pages: Union[str, List[str]]) -> Tuple[pd.DataFra
     ordered_metal_rows = []
     for metal_spec in config.METALS_COMMODITIES:
         target_metal = metal_spec["commodity"]
+        display_item = config.METALS_NAME_MAP.get(target_metal, target_metal)
+        table_type = metal_spec.get("table", "Metal")
+
         if target_metal in matched_metals:
-            ordered_metal_rows.append(matched_metals[target_metal])
+            m_dict = matched_metals[target_metal].copy()
+            m_dict["Item"] = display_item
+            m_dict["Table"] = table_type
+            ordered_metal_rows.append(m_dict)
         else:
             ordered_metal_rows.append({
-                "Commodity": target_metal,
+                "Item": display_item,
+                "Table": table_type,
                 "Price": "N/A",
                 "Weekly": "N/A",
                 "Monthly": "N/A",
                 "YoY": "N/A"
             })
 
-    df_metals = pd.DataFrame(ordered_metal_rows)[config.COMMODITY_COLUMNS] if ordered_metal_rows else pd.DataFrame(columns=config.COMMODITY_COLUMNS)
+    df_metals = pd.DataFrame(ordered_metal_rows)[config.METALS_COLUMNS] if ordered_metal_rows else pd.DataFrame(columns=config.METALS_COLUMNS)
 
     metadata = {
         "timestamp": timestamp_str,

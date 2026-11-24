@@ -177,8 +177,8 @@ if not df_curr.empty or not df_energy.empty or not df_metals.empty:
                 highlight_items.append((r["Commodity"], r["Price"], r["YoY"], r["Weekly"]))
     if not df_metals.empty:
         for _, r in df_metals.iterrows():
-            if r["Commodity"] in ["Copper", "Lithium"]:
-                highlight_items.append((r["Commodity"], r["Price"], r["YoY"], r["Weekly"]))
+            if any(k in str(r.get("Item", "")) for k in ["Copper", "Lithium"]):
+                highlight_items.append((r["Item"], r["Price"], r["YoY"], r["Weekly"]))
 
     for idx, item in enumerate(highlight_items[:5]):
         with metric_cols[idx]:
