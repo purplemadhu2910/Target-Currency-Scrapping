@@ -510,3 +510,43 @@ Symbols not available. Dumping unresolved backtrace:
 2026-11-24 11:44:40 [INFO] [ExcelWriter] Successfully saved to Excel: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx (All 4 sheets updated).
 2026-11-24 11:44:40 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx (4 sheets)
 2026-11-24 11:44:40 [INFO] [Main] Manual extraction completed successfully.
+2026-11-24 11:46:53 [INFO] [Main] Executing Manual Mode...
+2026-11-24 11:46:53 [INFO] [Main] Starting extraction cycle (Mode: Manual)...
+2026-11-24 11:46:53 [INFO] [Scraper] Initializing Chrome browser session for 4 target page(s)...
+2026-11-24 11:46:57 [INFO] [Scraper] Fetching URL [1/4] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-24 11:47:18 [INFO] [Scraper] Successfully loaded page 1: 727,624 characters.
+2026-11-24 11:47:18 [INFO] [Scraper] Fetching URL [2/4] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-24 11:47:22 [INFO] [Scraper] Successfully loaded page 2: 731,922 characters.
+2026-11-24 11:47:22 [INFO] [Scraper] Fetching URL [3/4] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-24 11:47:34 [INFO] [Scraper] Successfully loaded page 3: 701,856 characters.
+2026-11-24 11:47:34 [INFO] [Scraper] Fetching URL [4/4] (Attempt 1): https://tradingeconomics.com/commodities
+2026-11-24 11:47:38 [INFO] [Scraper] Successfully loaded page 4: 558,027 characters.
+2026-11-24 11:47:41 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-24 11:47:41 [INFO] [DataProcessor] Captured live USDCNY exchange rate: 6.66159
+2026-11-24 11:47:41 [INFO] [DataProcessor] Captured live USDCNY exchange rate: 6.66159
+2026-11-24 11:47:43 [INFO] [DataProcessor] Price for JPY/INR is < 1; multiplied by 100 -> 58.4240
+2026-11-24 11:47:43 [INFO] [DataProcessor] Factored Copper: 5.4984 * 2204.62 -> 12,121.88
+2026-11-24 11:47:43 [INFO] [DataProcessor] Factored Methanol price: 3291.0 CNY / 6.66159 USDCNY -> 494.03 USD/T
+2026-11-24 11:47:44 [INFO] [ExcelWriter] Successfully saved to Excel: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx (All 4 sheets updated).
+2026-11-24 11:47:44 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx (4 sheets)
+2026-11-24 11:47:44 [INFO] [Main] Manual extraction completed successfully.
+2026-11-24 11:52:09 [INFO] [Main] Executing Manual Mode...
+2026-11-24 11:52:09 [INFO] [Main] Starting extraction cycle (Mode: Manual)...
+2026-11-24 11:52:09 [INFO] [Scraper] Initializing Chrome browser session for 4 target page(s)...
+2026-11-24 11:52:12 [INFO] [Scraper] Fetching URL [1/4] (Attempt 1): https://tradingeconomics.com/currencies
+2026-11-24 11:52:38 [INFO] [Scraper] Successfully loaded page 1: 729,200 characters.
+2026-11-24 11:52:38 [INFO] [Scraper] Fetching URL [2/4] (Attempt 1): https://tradingeconomics.com/currencies?base=eur
+2026-11-24 11:52:51 [INFO] [Scraper] Successfully loaded page 2: 700,213 characters.
+2026-11-24 11:52:51 [INFO] [Scraper] Fetching URL [3/4] (Attempt 1): https://tradingeconomics.com/currencies?base=jpy
+2026-11-24 11:53:22 [INFO] [Scraper] Successfully loaded page 3: 703,107 characters.
+2026-11-24 11:53:22 [INFO] [Scraper] Fetching URL [4/4] (Attempt 1): https://tradingeconomics.com/commodities
+2026-11-24 11:53:40 [INFO] [Scraper] Successfully loaded page 4: 558,457 characters.
+2026-11-24 11:53:43 [INFO] [Scraper] Browser session closed cleanly.
+2026-11-24 11:53:44 [INFO] [DataProcessor] Captured live USDCNY exchange rate: 6.66226
+2026-11-24 11:53:44 [INFO] [DataProcessor] Captured live USDCNY exchange rate: 6.66226
+2026-11-24 11:53:45 [INFO] [DataProcessor] Price for JPY/INR is < 1; multiplied by 100 -> 58.4240
+2026-11-24 11:53:45 [INFO] [DataProcessor] Factored Copper: 5.5045 * 2204.62 -> 12,135.33
+2026-11-24 11:53:46 [INFO] [DataProcessor] Factored Methanol price: 3291.0 CNY / 6.66226 USDCNY -> 493.98 USD/T
+2026-11-24 11:53:46 [INFO] [ExcelWriter] Successfully saved to Excel: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx (All 4 sheets updated).
+2026-11-24 11:53:47 [INFO] [Main] [SUCCESS] Excel workbook updated successfully: C:\Users\madhu\OneDrive\Desktop\Madhu\INTERNSHIP\wsp\output\extracted_data.xlsx (4 sheets)
+2026-11-24 11:53:47 [INFO] [Main] Manual extraction completed successfully.

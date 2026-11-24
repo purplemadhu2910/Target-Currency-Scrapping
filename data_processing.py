@@ -210,6 +210,10 @@ def parse_all_target_data(html_pages: Union[str, List[str]]) -> Tuple[pd.DataFra
                     b_tag = comm_cell.find("b")
                     raw_item = b_tag.get_text(strip=True) if b_tag else comm_cell.get_text(strip=True)
 
+                    # Extract unit quoted below metal name on Trading Economics (e.g. USD/T, USD/Lbs, CNY/T)
+                    div_tag = comm_cell.find("div")
+                    unit_text = div_tag.get_text(strip=True) if div_tag else ""
+
                     # 1. Match against our 7 target Energy commodities
                     for target_name in ["Methanol", "Ethanol", "Crude Oil", "Brent", "Natural gas", "TTF Gas", "Jet Fuel"]:
                         aliases = config.TARGET_COMMODITIES.get(target_name, [])
@@ -232,7 +236,7 @@ def parse_all_target_data(html_pages: Union[str, List[str]]) -> Tuple[pd.DataFra
                         factor = metal_spec.get("factor", 1)
 
                         if _matches_metal_alias(m_name, aliases, raw_item):
-                            row_data = {"Commodity": m_name}
+                            row_data = {"Commodity": m_name, "unit": unit_text}
                             for col_name in config.COMMODITY_COLUMNS[1:]:
                                 c_idx = col_indices[col_name]
                                 if c_idx != -1 and c_idx < len(cells):
@@ -301,15 +305,22 @@ def parse_all_target_data(html_pages: Union[str, List[str]]) -> Tuple[pd.DataFra
     ordered_metal_rows = []
     for metal_spec in config.METALS_COMMODITIES:
         target_metal = metal_spec["commodity"]
-        display_item = config.METALS_NAME_MAP.get(target_metal, target_metal)
         table_type = metal_spec.get("table", "Metal")
+        base_name = config.METALS_BASE_NAMES.get(target_metal, target_metal)
 
         if target_metal in matched_metals:
             m_dict = matched_metals[target_metal].copy()
+            unit_val = m_dict.pop("unit", "")
+            if unit_val:
+                display_item = f"{base_name} ({unit_val})"
+            else:
+                display_item = config.METALS_NAME_MAP.get(target_metal, target_metal)
+
             m_dict["Item"] = display_item
             m_dict["Table"] = table_type
             ordered_metal_rows.append(m_dict)
         else:
+            display_item = config.METALS_NAME_MAP.get(target_metal, target_metal)
             ordered_metal_rows.append({
                 "Item": display_item,
                 "Table": table_type,

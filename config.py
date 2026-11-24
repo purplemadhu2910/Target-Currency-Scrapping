@@ -54,20 +54,38 @@ TARGET_COMMODITIES = {
 }
 
 # --- SPECIFIC TARGET METALS & INDUSTRIAL COMMODITIES ---
+# Base exchange-traded commodity names
+METALS_BASE_NAMES = {
+    "HRC Steel": "HRC Steel, NYMEX",
+    "Copper": "Copper, LME",
+    "Aluminum": "Aluminium, LME",
+    "TinUSD": "Tin, LME",
+    "Zinc": "Zinc, LME",
+    "Nickel": "Nickel, LME",
+    "Platinum": "Platinum, NYMEX",
+    "Palladium": "Palladium, NYMEX",
+    "Rhodium": "Rhodium",
+    "Lead": "Lead, LME",
+    "Lithium": "Lithium",
+    "Urea": "Urea, CME",
+    "Di-ammonium": "Di-ammonium Phosphate, CME"
+}
+
+# Item names mapped with exact units quoted below metal names on Trading Economics
 METALS_NAME_MAP = {
-    "HRC Steel": "HRC Steel, NYMEX ($/Ton)",
-    "Copper": "Copper, LME ($/Ton)",
-    "Aluminum": "Aluminium, LME ($/Ton)",
-    "TinUSD": "Tin, LME ($/Ton)",
-    "Zinc": "Zinc, LME ($/Ton)",
-    "Nickel": "Nickel, LME ($/Ton)",
-    "Platinum": "Platinum, NYMEX ($/troy oz)",
-    "Palladium": "Palladium, NYMEX ($/troy oz)",
-    "Rhodium": "Rhodium ($/troy oz)",
-    "Lead": "Lead, LME ($/Ton)",
-    "Lithium": "Lithium ($/Ton)",
-    "Urea": "Urea, CME ($/Ton)",
-    "Di-ammonium": "Di-ammonium Phosphate, CME ($/Ton)"
+    "HRC Steel": "HRC Steel, NYMEX (USD/T)",
+    "Copper": "Copper, LME (USD/Lbs)",
+    "Aluminum": "Aluminium, LME (USD/T)",
+    "TinUSD": "Tin, LME (USD/T)",
+    "Zinc": "Zinc, LME (USD/T)",
+    "Nickel": "Nickel, LME (USD/T)",
+    "Platinum": "Platinum, NYMEX (USD/t.oz)",
+    "Palladium": "Palladium, NYMEX (USD/t.oz)",
+    "Rhodium": "Rhodium (USD/t oz.)",
+    "Lead": "Lead, LME (USD/T)",
+    "Lithium": "Lithium (CNY/T)",
+    "Urea": "Urea, CME (USD/T)",
+    "Di-ammonium": "Di-ammonium Phosphate, CME (USD/T)"
 }
 
 METALS_COMMODITIES = [
