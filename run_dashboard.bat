@@ -1,8 +1,8 @@
 @echo off
-title Live Currency Automation Dashboard
+title Live Currencies & Energy Commodities Dashboard
 cd /d "%~dp0"
 echo ========================================================
-echo   Launching Streamlit Currency Dashboard...
+echo   Launching Market Automation Dashboard (Currencies + Energy)...
 echo ========================================================
 python -m streamlit run app.py
 pause
